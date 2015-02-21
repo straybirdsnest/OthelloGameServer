@@ -10,7 +10,7 @@
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/othellogamedb</property>
-        <property name="connection.username">othellogameserver</property>
+        <property name="connection.username">othelloserver</property>
         <property name="connection.password">8ae8e9f2af3b29f473d440306ad14faf</property>
 
         <!-- JDBC connection pool (use the built-in) -->
