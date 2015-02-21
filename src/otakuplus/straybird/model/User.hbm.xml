@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="otakuplus.straybird.model">
+  <class name="User" table="User">
+    <id name="userId" type="int" column="user_id">
+      <generator class="increment"/>
+    </id>
+    <property name="username" />
+    <property name="emailAddress" column="email" />
+    <property name="password" />
+    <property name="createTime" type="timestamp" column="crate_time" />
+    <property name="isActive" type="boolean" column="is_active" />
+
+  </class>
+</hibernate-mapping>
