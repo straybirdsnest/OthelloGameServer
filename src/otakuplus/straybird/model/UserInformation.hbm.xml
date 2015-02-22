@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="otakuplus.straybird.model">
+  <class name="UserInformation" table="UserInformation">
+    <id name="userInformationId" type="int" column="userinformation_id">
+      <generator class="increment"/>
+    </id>
+    <property name="nickname" />
+    <property name="birthday" type="date" />
+    <property name="gameWins" column="game_wins" />
+    <property name="gameDraws" column="game_draws" />
+    <property name="gameLosts" column="game_losts" />
+
+  </class>
+</hibernate-mapping>

@@ -1,7 +1,6 @@
 package otakuplus.straybird.model;
 
 import java.util.Date;
-
 import org.hibernate.Session;
 
 public class HibernateTest {
