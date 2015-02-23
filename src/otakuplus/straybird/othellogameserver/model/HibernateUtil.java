@@ -1,4 +1,4 @@
-package otakuplus.straybird.model;
+package otakuplus.straybird.othellogameserver.model;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;

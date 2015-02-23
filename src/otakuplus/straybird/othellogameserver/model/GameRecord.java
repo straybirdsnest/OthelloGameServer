@@ -1,4 +1,4 @@
-package otakuplus.straybird.model;
+package otakuplus.straybird.othellogameserver.model;
 
 import java.util.Date;
 

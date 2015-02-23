@@ -1,4 +1,4 @@
-package otakuplus.straybird;
+package otakuplus.straybird.othellogameserver;
 
 // mysql database name othellogamedb
 // username othelloserver@localhost
