@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package="otakuplus.straybird.model">
+<hibernate-mapping package="otakuplus.straybird.othellogameserver.model">
   <class name="User" table="User">
     <id name="userId" type="int" column="user_id">
       <generator class="increment"/>

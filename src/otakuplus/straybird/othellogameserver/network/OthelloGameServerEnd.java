@@ -23,12 +23,12 @@ public class OthelloGameServerEnd {
 				return new OthelloGameConnection();
 			}
 		};
-		server.start();
 
 		KryonetUtil.register(server);
 
 		server.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
+				System.out.println("Connect to server");
 				if (object instanceof User) {
 					User user = (User) object;
 					String username = user.getUsername();
@@ -38,7 +38,7 @@ public class OthelloGameServerEnd {
 						return;
 					} else {
 						Session session = HibernateUtil.getSessionFactory()
-								.getCurrentSession();
+								.openSession();
 						List<User> result = session.createCriteria(User.class)
 								.add(Restrictions.eq("username", username))
 								.add(Restrictions.eq("password", password))
@@ -47,7 +47,8 @@ public class OthelloGameServerEnd {
 							Iterator<User> usersIterator = result.iterator();
 							while (usersIterator.hasNext()) {
 								System.out.println("Query Result: "
-										+ usersIterator.next().getUserId());
+										+ usersIterator.next()
+												.getEmailAddress());
 							}
 						}
 					}
@@ -58,11 +59,14 @@ public class OthelloGameServerEnd {
 
 			}
 		});
+
+		server.bind(KryonetUtil.SERVER_PORT);
+		server.start();
 	}
 
 	public static void main(String[] args) throws IOException {
 		Log.set(Log.LEVEL_DEBUG);
-		OthelloGameServerEnd serverEnd = new OthelloGameServerEnd();
+		new OthelloGameServerEnd();
 	}
 
 }

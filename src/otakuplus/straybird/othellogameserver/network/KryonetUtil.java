@@ -7,7 +7,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 
 public class KryonetUtil {
 	
-	public static final int SERVER_PORT = 998998;
+	public static final int SERVER_PORT = 8123;
 
 	public static void register(EndPoint endPoint) {
 		Kryo kryo = endPoint.getKryo();
