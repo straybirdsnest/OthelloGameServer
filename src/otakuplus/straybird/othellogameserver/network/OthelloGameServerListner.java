@@ -12,8 +12,13 @@ import otakuplus.straybird.othellogameserver.model.UserInformation;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 
 public class OthelloGameServerListner extends Listener {
+	private Server server;
+	public OthelloGameServerListner(Server server){
+		this.server = server;
+	}
 	
 	public void received(Connection connection, Object object) {
 		System.out.println("Connect to server");
@@ -22,7 +27,7 @@ public class OthelloGameServerListner extends Listener {
 			String username = user.getUsername();
 			String password = user.getPassword();
 
-			if (user == null || password == null) {
+			if (username == null || password == null) {
 				return;
 			} else {
 				Session session = HibernateUtil.getSessionFactory()
@@ -30,14 +35,16 @@ public class OthelloGameServerListner extends Listener {
 				List<User> result = session.createCriteria(User.class)
 						.add(Restrictions.eq("username", username))
 						.add(Restrictions.eq("password", password)).list();
+				session.close();
 				if (result.size() > 0) {
 					Iterator<User> usersIterator = result.iterator();
+					User resultUser = null;
 					while (usersIterator.hasNext()) {
-						System.out.println("Query Result: "
-								+ usersIterator.next().getEmailAddress());
+						resultUser = usersIterator.next();
+						System.out.println("Send user information");
+						server.sendToTCP(connection.getID(), resultUser);
 					}
 				}
-				session.close();
 			}
 		}else if(object instanceof UserInformation){
 			

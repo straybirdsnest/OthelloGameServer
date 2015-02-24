@@ -1,11 +1,8 @@
 package otakuplus.straybird.othellogameserver.model;
 
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 public class HibernateTest {
 

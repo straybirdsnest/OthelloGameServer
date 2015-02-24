@@ -17,7 +17,7 @@ public class OthelloGameServerEnd {
 
 		KryonetUtil.register(server);
 
-		server.addListener(new OthelloGameServerListner());
+		server.addListener(new OthelloGameServerListner(server));
 
 		server.bind(KryonetUtil.SERVER_PORT);
 		server.start();
