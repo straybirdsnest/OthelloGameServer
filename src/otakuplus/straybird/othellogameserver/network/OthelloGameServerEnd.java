@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 
 import otakuplus.straybird.othellogameserver.model.HibernateUtil;
 import otakuplus.straybird.othellogameserver.model.User;
+import otakuplus.straybird.othellogameserver.model.UserInformation;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -31,18 +32,17 @@ public class OthelloGameServerEnd {
 				System.out.println("Connect to server");
 				if (object instanceof Login) {
 					Login login = (Login) object;
-					doLogin(login);
+					doLogin(connection, login);
 				} else if (object instanceof Logout) {
 					Logout logout = (Logout) object;
-					doLogout(logout);
+					doLogout(connection, logout);
 				} else if (object instanceof GetUserInformation) {
 					GetUserInformation getUserInformation = (GetUserInformation) object;
-					doGetUserInformation(getUserInformation);
+					doGetUserInformation(connection, getUserInformation);
 				}
 			}
 
 			public void disconnected(Connection connection) {
-
 			}
 		});
 
@@ -50,7 +50,7 @@ public class OthelloGameServerEnd {
 		server.start();
 	}
 
-	public void doLogin(Login login) {
+	public void doLogin(Connection connection, Login login) {
 		String username = login.getUsername();
 		String password = login.getPassword();
 
@@ -67,19 +67,50 @@ public class OthelloGameServerEnd {
 				User resultUser = null;
 				while (usersIterator.hasNext()) {
 					resultUser = usersIterator.next();
-					System.out
-							.println("User Login:" + resultUser.getUsername());
+					Log.info("[Othello Game Server]" + resultUser.getUsername()
+							+ " login.");
 				}
 			}
 		}
 	}
 
-	public void doLogout(Logout logout) {
+	public void doLogout(Connection connection, Logout logout) {
 		int userId = logout.getUserId();
-		System.out.println("User logout :" + userId);
+		User resultUser = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<User> result = session.createCriteria(User.class)
+				.add(Restrictions.eq("", userId)).list();
+		session.close();
+		if (result.size() > 0) {
+			Iterator<User> resultIterator = result.iterator();
+			while (resultIterator.hasNext()) {
+				resultUser = resultIterator.next();
+				Log.info("[Othello Game Server]" + resultUser.getUsername()
+						+ " logout.");
+			}
+		}
 	}
 
-	public void doGetUserInformation(GetUserInformation getUserInformation) {
+	public void doGetUserInformation(Connection connection,
+			GetUserInformation getUserInformation) {
+		int userId = getUserInformation.getUserId();
+		UserInformation userInformation = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<UserInformation> result = session
+				.createCriteria(UserInformation.class)
+				.add(Restrictions.eq("", userId)).list();
+		if (result.size() > 0) {
+			Iterator<UserInformation> resultIterator = result.iterator();
+			while (resultIterator.hasNext()) {
+				userInformation = resultIterator.next();
+
+			}
+		}
+		session.close();
+	}
+
+	public void doUpdateUserInformation(Connection connection,
+			UpdateUserInformation update) {
 
 	}
 
