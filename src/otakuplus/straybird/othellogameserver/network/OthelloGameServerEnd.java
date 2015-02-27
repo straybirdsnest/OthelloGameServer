@@ -18,8 +18,10 @@ import com.esotericsoftware.minlog.Log;
 
 public class OthelloGameServerEnd {
 
+	protected Server server;
+
 	public OthelloGameServerEnd() throws IOException {
-		Server server = new Server() {
+		server = new Server() {
 			protected Connection newConnection() {
 				return new OthelloGameConnection();
 			}
@@ -39,6 +41,9 @@ public class OthelloGameServerEnd {
 				} else if (object instanceof GetUserInformation) {
 					GetUserInformation getUserInformation = (GetUserInformation) object;
 					doGetUserInformation(connection, getUserInformation);
+				} else if (object instanceof GetUserOnlineList) {
+					GetUserOnlineList getUserOnlineList = (GetUserOnlineList) object;
+					doGetUserOnlineList(connection, getUserOnlineList);
 				}
 			}
 
@@ -53,6 +58,7 @@ public class OthelloGameServerEnd {
 	public void doLogin(Connection connection, Login login) {
 		String username = login.getUsername();
 		String password = login.getPassword();
+		ProcessResponse processResponse = new ProcessResponse();
 
 		if (username == null || password == null) {
 			return;
@@ -69,7 +75,14 @@ public class OthelloGameServerEnd {
 					resultUser = usersIterator.next();
 					Log.info("[Othello Game Server]" + resultUser.getUsername()
 							+ " login.");
+					processResponse.setResponseState(true);
+					server.sendToTCP(connection.getID(), processResponse);
 				}
+			} else {
+				Log.info("[Othello Game Server] Connection "
+						+ connection.getID() + " Login failed!");
+				processResponse.setResponseState(false);
+				server.sendToTCP(connection.getID(), processResponse);
 			}
 		}
 	}
@@ -77,6 +90,8 @@ public class OthelloGameServerEnd {
 	public void doLogout(Connection connection, Logout logout) {
 		int userId = logout.getUserId();
 		User resultUser = null;
+		ProcessResponse processResponse = new ProcessResponse();
+
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<User> result = session.createCriteria(User.class)
 				.add(Restrictions.eq("", userId)).list();
@@ -87,6 +102,8 @@ public class OthelloGameServerEnd {
 				resultUser = resultIterator.next();
 				Log.info("[Othello Game Server]" + resultUser.getUsername()
 						+ " logout.");
+				processResponse.setResponseState(true);
+				server.sendToTCP(connection.getID(), processResponse);
 			}
 		}
 	}
@@ -98,7 +115,7 @@ public class OthelloGameServerEnd {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<UserInformation> result = session
 				.createCriteria(UserInformation.class)
-				.add(Restrictions.eq("", userId)).list();
+				.add(Restrictions.eq("userinformation_id", userId)).list();
 		if (result.size() > 0) {
 			Iterator<UserInformation> resultIterator = result.iterator();
 			while (resultIterator.hasNext()) {
@@ -110,7 +127,16 @@ public class OthelloGameServerEnd {
 	}
 
 	public void doUpdateUserInformation(Connection connection,
-			UpdateUserInformation update) {
+			UpdateUserInformation updateInformation) {
+		UserInformation userInformation = updateInformation
+				.getUserInformation();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		session.save(userInformation);
+		session.close();
+	}
+
+	public void doGetUserOnlineList(Connection connection,
+			GetUserOnlineList getUserOnlineList) {
 
 	}
 
