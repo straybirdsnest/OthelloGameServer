@@ -31,7 +31,6 @@ public class OthelloGameServerEnd {
 
 		server.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
-				System.out.println("Connect to server");
 				if (object instanceof Login) {
 					Login login = (Login) object;
 					doLogin(connection, login);
@@ -77,7 +76,12 @@ public class OthelloGameServerEnd {
 							+ " login.");
 					processResponse.setRequestType(ProcessResponse.LOGIN);
 					processResponse.setResponseState(true);
+					processResponse.setRequestBody(login);
 					server.sendToTCP(connection.getID(), processResponse);
+					SendMessage sendMessage = new SendMessage();
+					sendMessage.setNickname("[服务器]");
+					sendMessage.setMessage("Login Message.");
+					server.sendToAllTCP(sendMessage);
 				}
 			} else {
 				Log.info("[Othello Game Server] Connection "

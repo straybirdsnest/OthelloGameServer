@@ -7,6 +7,7 @@ public class ProcessResponse {
 	public static int GET_USER_ONLINE_LIST = 103;
 
 	private int requestType;
+	private Object requestBody;
 	private boolean responseState = false;
 
 	public int getRequestType() {
@@ -15,6 +16,14 @@ public class ProcessResponse {
 
 	public void setRequestType(int requestType) {
 		this.requestType = requestType;
+	}
+
+	public Object getRequestBody() {
+		return requestBody;
+	}
+
+	public void setRequestBody(Object requestBody) {
+		this.requestBody = requestBody;
 	}
 
 	public boolean isResponseState() {
