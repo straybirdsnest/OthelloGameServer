@@ -75,6 +75,7 @@ public class OthelloGameServerEnd {
 					resultUser = usersIterator.next();
 					Log.info("[Othello Game Server]" + resultUser.getUsername()
 							+ " login.");
+					processResponse.setRequestType(ProcessResponse.LOGIN);
 					processResponse.setResponseState(true);
 					server.sendToTCP(connection.getID(), processResponse);
 				}
