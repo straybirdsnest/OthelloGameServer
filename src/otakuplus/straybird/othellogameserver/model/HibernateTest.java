@@ -14,14 +14,14 @@ public class HibernateTest {
 		List<UserInformation> result = session
 				.createCriteria(UserInformation.class)
 				.add(Restrictions.eq("userId",1)).list();
-		session.close();
 		System.out.println("Get User Information:"+result.size());
 		if (result.size() > 0) {
 			Iterator<UserInformation> resultIterator = result.iterator();
 			while (resultIterator.hasNext()) {
 				userInformation = resultIterator.next();
-				System.out.println("UserInfor:"+userInformation.getNickname());
+				System.out.println("Username: "+userInformation.getUser().getUsername()+",UserInfor: "+userInformation.getNickname());
 			}
 		}
+		session.close();
 	}
 }
