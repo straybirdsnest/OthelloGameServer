@@ -1,22 +1,27 @@
 package otakuplus.straybird.othellogameserver.model;
 
-import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 public class HibernateTest {
 
 	public static void main(String[] args) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		User user = new User();
-		user.setUsername("TestUser");
-		user.setPassword("TestUser");
-		user.setEmailAddress("test@localhost.com");
-		user.setCreateTime(new Date());
-
-		session.save(user);
-		session.getTransaction().commit();
-		HibernateUtil.getSessionFactory().close();
+		UserInformation userInformation = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<UserInformation> result = session
+				.createCriteria(UserInformation.class)
+				.add(Restrictions.eq("userId",1)).list();
+		session.close();
+		System.out.println("Get User Information:"+result.size());
+		if (result.size() > 0) {
+			Iterator<UserInformation> resultIterator = result.iterator();
+			while (resultIterator.hasNext()) {
+				userInformation = resultIterator.next();
+				System.out.println("UserInfor:"+userInformation.getNickname());
+			}
+		}
 	}
 }

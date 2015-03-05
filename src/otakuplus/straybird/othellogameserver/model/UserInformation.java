@@ -5,22 +5,15 @@ import java.util.Date;
 public class UserInformation {
 	public static final String SEXUALITY_MALE = "male";
 	public static final String SEXUALITY_FEMALE = "female";
-	private int userInformationId = 0;
-	private int userId = 0;
+	private int userId;
+	private User user;
 	private String nickname = null;
 	private String sexuality = null;
 	private Date birthday = null;
 	private int gameWins = 0;
 	private int gameDraws = 0;
 	private int gameLosts = 0;
-
-	public int getUserInformationId() {
-		return userInformationId;
-	}
-
-	public void setUserInformationId(int userInformationId) {
-		this.userInformationId = userInformationId;
-	}
+	private int rankPoints = 0;
 
 	public int getUserId() {
 		return userId;
@@ -28,6 +21,14 @@ public class UserInformation {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Date getBirthday() {
@@ -76,6 +77,14 @@ public class UserInformation {
 
 	public void setGameLosts(int gameLosts) {
 		this.gameLosts = gameLosts;
+	}
+
+	public int getRankPoints() {
+		return rankPoints;
+	}
+
+	public void setRankPoints(int rankPoints) {
+		this.rankPoints = rankPoints;
 	}
 
 	public static void main(String[] args) {

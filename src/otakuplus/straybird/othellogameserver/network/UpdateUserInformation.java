@@ -15,15 +15,12 @@ public class UpdateUserInformation {
 
 	public static void main(String[] args) {
 		UserInformation userInformation = new UserInformation();
-		userInformation.setUserInformationId(10086);
 		userInformation.setNickname("Jack");
 		userInformation.setGameWins(50);
 		userInformation.setGameDraws(100);
 		userInformation.setGameLosts(50);
 		UpdateUserInformation updateUserInformation = new UpdateUserInformation();
 		updateUserInformation.setUserInformation(userInformation);
-		assert (updateUserInformation.getUserInformation()
-				.getUserInformationId() == 10086);
 		assert (updateUserInformation.getUserInformation().getNickname()
 				.equals("Jack"));
 		assert (updateUserInformation.getUserInformation().getGameWins() == 50);

@@ -1,13 +1,9 @@
 package otakuplus.straybird.othellogameserver.network;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
-import otakuplus.straybird.othellogameserver.network.SendMessage;
-import otakuplus.straybird.othellogameserver.network.Login;
-import otakuplus.straybird.othellogameserver.network.Logout;
-import otakuplus.straybird.othellogameserver.model.UserInformation;
 import otakuplus.straybird.othellogameserver.model.User;
+import otakuplus.straybird.othellogameserver.model.UserInformation;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
@@ -18,7 +14,6 @@ public class KryonetUtil {
 
 	public static void register(EndPoint endPoint) {
 		Kryo kryo = endPoint.getKryo();
-		kryo.register(Timestamp.class);
 		kryo.register(Date.class);
 
 		kryo.register(Login.class);

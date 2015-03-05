@@ -111,7 +111,7 @@ public class OthelloGameServerEnd {
 
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<User> result = session.createCriteria(User.class)
-				.add(Restrictions.eq("", userId)).list();
+				.add(Restrictions.eq("userId", userId)).list();
 		session.close();
 		if (result.size() > 0) {
 			Iterator<User> resultIterator = result.iterator();
@@ -132,15 +132,16 @@ public class OthelloGameServerEnd {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<UserInformation> result = session
 				.createCriteria(UserInformation.class)
-				.add(Restrictions.eq("userinformation_id", userId)).list();
+				.add(Restrictions.eq("userId", userId)).list();
+		session.close();
+		System.out.println("Get User Information:"+result.size());
 		if (result.size() > 0) {
 			Iterator<UserInformation> resultIterator = result.iterator();
 			while (resultIterator.hasNext()) {
 				userInformation = resultIterator.next();
-
+				kryonetServer.sendToTCP(connection.getID(), userInformation);
 			}
 		}
-		session.close();
 	}
 
 	public void doUpdateUserInformation(Connection connection,
