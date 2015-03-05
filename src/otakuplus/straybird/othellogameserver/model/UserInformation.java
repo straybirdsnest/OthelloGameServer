@@ -6,8 +6,10 @@ public class UserInformation {
 	public static final String SEXUALITY_MALE = "male";
 	public static final String SEXUALITY_FEMALE = "female";
 	private int userInformationId = 0;
-	private Date birthday = null;
+	private int userId = 0;
 	private String nickname = null;
+	private String sexuality = null;
+	private Date birthday = null;
 	private int gameWins = 0;
 	private int gameDraws = 0;
 	private int gameLosts = 0;
@@ -20,12 +22,24 @@ public class UserInformation {
 		this.userInformationId = userInformationId;
 	}
 
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	public Date getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
+	public String getSexuality() {
+		return sexuality;
+	}
+
+	public void setSexuality(String sexuality) {
+		this.sexuality = sexuality;
 	}
 
 	public String getNickname() {
@@ -34,6 +48,10 @@ public class UserInformation {
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 
 	public int getGameWins() {

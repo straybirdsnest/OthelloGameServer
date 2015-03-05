@@ -8,6 +8,7 @@
     <id name="userInformationId" type="int" column="userinformation_id">
       <generator class="increment"/>
     </id>
+    <property name="userId" column="user_id">
     <property name="nickname" />
     <property name="birthday" type="date" />
     <property name="gameWins" column="game_wins" />

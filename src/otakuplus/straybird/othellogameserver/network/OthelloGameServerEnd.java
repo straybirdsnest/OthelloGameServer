@@ -19,18 +19,18 @@ import com.esotericsoftware.minlog.Log;
 
 public class OthelloGameServerEnd {
 
-	protected Server server;
+	protected Server kryonetServer;
 
 	public OthelloGameServerEnd() throws IOException {
-		server = new Server() {
+		kryonetServer = new Server() {
 			protected Connection newConnection() {
 				return new OthelloGameConnection();
 			}
 		};
 
-		KryonetUtil.register(server);
+		KryonetUtil.register(kryonetServer);
 
-		server.addListener(new Listener() {
+		kryonetServer.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
 				if (object instanceof Login) {
 					Login login = (Login) object;
@@ -44,6 +44,9 @@ public class OthelloGameServerEnd {
 				} else if (object instanceof GetUserOnlineList) {
 					GetUserOnlineList getUserOnlineList = (GetUserOnlineList) object;
 					doGetUserOnlineList(connection, getUserOnlineList);
+				} else if (object instanceof SendMessage) {
+					SendMessage sendMessage = (SendMessage) object;
+					doSendMessage(sendMessage);
 				}
 			}
 
@@ -51,8 +54,8 @@ public class OthelloGameServerEnd {
 			}
 		});
 
-		server.bind(KryonetUtil.SERVER_PORT);
-		server.start();
+		kryonetServer.bind(KryonetUtil.SERVER_PORT);
+		kryonetServer.start();
 	}
 
 	public void doLogin(Connection connection, Login login) {
@@ -78,18 +81,25 @@ public class OthelloGameServerEnd {
 					processResponse.setRequestType(ProcessResponse.LOGIN);
 					processResponse.setResponseState(true);
 					processResponse.setRequestBody(login);
-					server.sendToTCP(connection.getID(), processResponse);
+					kryonetServer
+							.sendToTCP(connection.getID(), processResponse);
+
+					// send back user to client
+					kryonetServer.sendToTCP(connection.getID(), resultUser);
+
 					SendMessage sendMessage = new SendMessage();
 					sendMessage.setNickname("[服务器]");
 					sendMessage.setMessage("Login Message.");
 					sendMessage.setMessageTime(new Date());
-					server.sendToAllTCP(sendMessage);
+					kryonetServer.sendToAllTCP(sendMessage);
 				}
 			} else {
 				Log.info("[Othello Game Server] Connection "
 						+ connection.getID() + " Login failed!");
 				processResponse.setResponseState(false);
-				server.sendToTCP(connection.getID(), processResponse);
+				processResponse.setRequestType(ProcessResponse.LOGIN);
+				processResponse.setRequestBody(login);
+				kryonetServer.sendToTCP(connection.getID(), processResponse);
 			}
 		}
 	}
@@ -110,7 +120,7 @@ public class OthelloGameServerEnd {
 				Log.info("[Othello Game Server]" + resultUser.getUsername()
 						+ " logout.");
 				processResponse.setResponseState(true);
-				server.sendToTCP(connection.getID(), processResponse);
+				kryonetServer.sendToTCP(connection.getID(), processResponse);
 			}
 		}
 	}
@@ -145,6 +155,14 @@ public class OthelloGameServerEnd {
 	public void doGetUserOnlineList(Connection connection,
 			GetUserOnlineList getUserOnlineList) {
 
+	}
+
+	public void doSendMessage(SendMessage sendMessage) {
+		if (sendMessage.getNickname() != null
+				&& sendMessage.getMessage() != null
+				&& sendMessage.getMessageTime() != null) {
+			kryonetServer.sendToAllTCP(sendMessage);
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
