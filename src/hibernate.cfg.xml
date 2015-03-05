@@ -32,8 +32,6 @@
 		<property name="hbm2ddl.auto">update</property>
 
 		<mapping resource="otakuplus/straybird/othellogameserver/model/User.hbm.xml" />
-		<mapping
-			resource="otakuplus/straybird/othellogameserver/model/UserInformation.hbm.xml" />
 
 	</session-factory>
 

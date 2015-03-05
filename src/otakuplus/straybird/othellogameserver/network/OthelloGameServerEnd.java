@@ -76,6 +76,7 @@ public class OthelloGameServerEnd {
 				User resultUser = null;
 				while (usersIterator.hasNext()) {
 					resultUser = usersIterator.next();
+					System.out.println(resultUser.getUsername()+"create_at"+resultUser.getCreateTime());
 					Log.info("[Othello Game Server]" + resultUser.getUsername()
 							+ " login.");
 					processResponse.setRequestType(ProcessResponse.LOGIN);

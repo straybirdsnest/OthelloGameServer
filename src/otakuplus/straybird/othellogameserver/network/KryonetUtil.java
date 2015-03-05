@@ -1,6 +1,7 @@
 package otakuplus.straybird.othellogameserver.network;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 import otakuplus.straybird.othellogameserver.model.User;
 import otakuplus.straybird.othellogameserver.model.UserInformation;
@@ -8,13 +9,18 @@ import otakuplus.straybird.othellogameserver.model.UserInformation;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
+import de.javakaffee.kryoserializers.DateSerializer;
+
 public class KryonetUtil {
 
 	public static final int SERVER_PORT = 8123;
 
 	public static void register(EndPoint endPoint) {
 		Kryo kryo = endPoint.getKryo();
-		kryo.register(Date.class);
+		kryo.addDefaultSerializer(Date.class, DateSerializer.class);
+		kryo.addDefaultSerializer(Timestamp.class, DateSerializer.class);
+		kryo.register(Timestamp.class);
+		kryo.register(java.util.Date.class);
 
 		kryo.register(Login.class);
 		kryo.register(Logout.class);

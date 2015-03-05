@@ -8,11 +8,10 @@
 		<id name="userId" type="int" column="user_id">
 			<generator class="increment" />
 		</id>
-		<one-to-one name="userInformation" class="UserInformation" />
 		<property name="username" />
 		<property name="emailAddress" column="email" />
 		<property name="password" />
-		<property name="createTime" type="timestamp" column="crate_time" />
+		<property name="createTime" type="timestamp" column="create_time" />
 		<property name="isActive" type="boolean" column="is_active" />
 
 	</class>
