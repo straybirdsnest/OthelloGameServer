@@ -1,6 +1,7 @@
 package otakuplus.straybird.othellogameserver.network;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -81,6 +82,7 @@ public class OthelloGameServerEnd {
 					SendMessage sendMessage = new SendMessage();
 					sendMessage.setNickname("[服务器]");
 					sendMessage.setMessage("Login Message.");
+					sendMessage.setMessageTime(new Date());
 					server.sendToAllTCP(sendMessage);
 				}
 			} else {
