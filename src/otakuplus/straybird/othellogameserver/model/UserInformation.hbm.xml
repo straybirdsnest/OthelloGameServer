@@ -4,11 +4,9 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="otakuplus.straybird.othellogameserver.model">
-	<class name="UserInformation" table="UserInformation">
+	<class name="UserInformation" table="OthelloUserInformation">
 		<id name="userId" type="int" column="user_id">
-			<generator class="foreign">
-				<param name="property">user</param>
-			</generator>
+			<generator class="increment" />
 		</id>
 		<property name="nickname" />
 		<property name="birthday" type="date" />

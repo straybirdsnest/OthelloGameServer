@@ -5,6 +5,7 @@ public class ProcessResponse {
 	public static int LOGOUT = 101;
 	public static int GET_USER_INFO = 102;
 	public static int GET_USER_ONLINE_LIST = 103;
+	public static int REGISTER_USER = 104;
 
 	private int requestType;
 	private Object requestBody;

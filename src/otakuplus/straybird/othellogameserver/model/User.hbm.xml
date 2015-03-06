@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="otakuplus.straybird.othellogameserver.model">
-	<class name="User" table="User">
+	<class name="User" table="OthelloUser">
 		<id name="userId" type="int" column="user_id">
 			<generator class="increment" />
 		</id>
@@ -13,6 +13,5 @@
 		<property name="password" />
 		<property name="createTime" type="timestamp" column="create_time" />
 		<property name="isActive" type="boolean" column="is_active" />
-
 	</class>
 </hibernate-mapping>

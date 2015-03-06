@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import otakuplus.straybird.othellogameserver.model.HibernateUtil;
@@ -32,7 +33,10 @@ public class OthelloGameServerEnd {
 
 		kryonetServer.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
-				if (object instanceof Login) {
+				if (object instanceof RegisterUser) {
+					RegisterUser registerUser = (RegisterUser) object;
+					doRegisterUser(registerUser);
+				} else if (object instanceof Login) {
 					Login login = (Login) object;
 					doLogin(connection, login);
 				} else if (object instanceof Logout) {
@@ -56,6 +60,21 @@ public class OthelloGameServerEnd {
 
 		kryonetServer.bind(KryonetUtil.SERVER_PORT);
 		kryonetServer.start();
+	}
+
+	public void doRegisterUser(RegisterUser registerUser) {
+		if (registerUser.getUser() != null
+				&& registerUser.getUserInformation() != null) {
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			Transaction transaction = session.beginTransaction();
+			User user = registerUser.getUser();
+			UserInformation userInformation = registerUser.getUserInformation();
+			session.save(user);
+			session.save(userInformation);
+			transaction.commit();
+			session.close();
+		}
+
 	}
 
 	public void doLogin(Connection connection, Login login) {
@@ -167,7 +186,9 @@ public class OthelloGameServerEnd {
 		UserInformation userInformation = updateInformation
 				.getUserInformation();
 		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = session.beginTransaction();
 		session.save(userInformation);
+		transaction.commit();
 		session.close();
 	}
 
