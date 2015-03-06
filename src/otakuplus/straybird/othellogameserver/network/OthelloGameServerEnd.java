@@ -70,15 +70,19 @@ public class OthelloGameServerEnd {
 			Transaction transaction = session.beginTransaction();
 			User user = registerUser.getUser();
 			UserInformation userInformation = registerUser.getUserInformation();
+			UserOnline userOnline = new UserOnline();
+			userOnline.setOnlineState(UserOnline.OFFLINE);
 
 			/*
 			 * very important to set userInformation's id as in the database,
 			 * userInformation table doesn't use auto increment and does use
-			 * foreign key.
+			 * foreign key. The same as userOnline.
 			 */
 			int userId = (int) session.save(user);
 			userInformation.setUserId(userId);
+			userOnline.setUserId(userId);
 			session.save(userInformation);
+			session.save(userOnline);
 			transaction.commit();
 			session.close();
 		}
@@ -143,6 +147,12 @@ public class OthelloGameServerEnd {
 					} catch (Exception e) {
 						if (transaction != null) {
 							transaction.rollback();
+							processResponse.setResponseState(false);
+							processResponse
+									.setRequestType(ProcessResponse.LOGIN);
+							processResponse.setRequestBody(login);
+							kryonetServer.sendToTCP(connection.getID(),
+									processResponse);
 							e.printStackTrace();
 						}
 					}
