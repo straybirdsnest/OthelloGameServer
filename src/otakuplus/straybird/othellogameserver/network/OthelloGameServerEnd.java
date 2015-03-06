@@ -89,11 +89,25 @@ public class OthelloGameServerEnd {
 					// send back user to client
 					kryonetServer.sendToTCP(connection.getID(), resultUser);
 
-					SendMessage sendMessage = new SendMessage();
-					sendMessage.setNickname("[服务器]");
-					sendMessage.setMessage("Login Message.");
-					sendMessage.setMessageTime(new Date());
-					kryonetServer.sendToAllTCP(sendMessage);
+					List<UserInformation> userInformationList = session
+							.createCriteria(UserInformation.class)
+							.add(Restrictions.eq("userId",
+									resultUser.getUserId())).list();
+					if (userInformationList.size() > 0) {
+						UserInformation userInformation = null;
+						SendMessage sendMessage = null;
+						Iterator<UserInformation> userInformationIterator = userInformationList
+								.iterator();
+						while (userInformationIterator.hasNext()) {
+							userInformation = userInformationIterator.next();
+							sendMessage = new SendMessage();
+							sendMessage.setNickname("[服务器]");
+							sendMessage.setMessage(userInformation
+									.getNickname() + "进入了游戏大厅。");
+							sendMessage.setMessageTime(new Date());
+							kryonetServer.sendToAllTCP(sendMessage);
+						}
+					}
 				}
 				session.close();
 
