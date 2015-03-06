@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import otakuplus.straybird.othellogameserver.model.HibernateUtil;
 import otakuplus.straybird.othellogameserver.model.User;
 import otakuplus.straybird.othellogameserver.model.UserInformation;
+import otakuplus.straybird.othellogameserver.model.UserOnline;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -94,8 +95,6 @@ public class OthelloGameServerEnd {
 				User resultUser = null;
 				while (usersIterator.hasNext()) {
 					resultUser = usersIterator.next();
-					System.out.println(resultUser.getUsername() + "create_at"
-							+ resultUser.getCreateTime());
 					Log.info("[Othello Game Server]" + resultUser.getUsername()
 							+ " login.");
 
@@ -104,27 +103,30 @@ public class OthelloGameServerEnd {
 					processResponse.setRequestBody(login);
 					kryonetServer
 							.sendToTCP(connection.getID(), processResponse);
+					// update useronline table
+					Transaction transaction = session.beginTransaction();
+					UserOnline userOnline = new UserOnline();
+					userOnline.setUserId(resultUser.getUserId());
+					userOnline.setOnlineState(UserOnline.ONLINE);
+					session.save(userOnline);
+					transaction.commit();
 
 					// send back user to client
 					kryonetServer.sendToTCP(connection.getID(), resultUser);
 
+					// send login message
 					List<UserInformation> userInformationList = session
 							.createCriteria(UserInformation.class)
 							.add(Restrictions.eq("userId",
 									resultUser.getUserId())).list();
 					if (userInformationList.size() > 0) {
 						UserInformation userInformation = null;
-						SendMessage sendMessage = null;
 						Iterator<UserInformation> userInformationIterator = userInformationList
 								.iterator();
 						while (userInformationIterator.hasNext()) {
 							userInformation = userInformationIterator.next();
-							sendMessage = new SendMessage();
-							sendMessage.setNickname("[服务器]");
-							sendMessage.setMessage(userInformation
-									.getNickname() + "进入了游戏大厅。");
-							sendMessage.setMessageTime(new Date());
-							kryonetServer.sendToAllTCP(sendMessage);
+							broadcastMessage(userInformation.getNickname()
+									+ "进入了游戏大厅。");
 						}
 					}
 				}
@@ -145,21 +147,52 @@ public class OthelloGameServerEnd {
 		int userId = logout.getUserId();
 		User resultUser = null;
 		ProcessResponse processResponse = new ProcessResponse();
+		processResponse.setRequestType(ProcessResponse.LOGOUT);
+		processResponse.setRequestBody(logout);
 
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<User> result = session.createCriteria(User.class)
 				.add(Restrictions.eq("userId", userId)).list();
-		session.close();
 		if (result.size() > 0) {
 			Iterator<User> resultIterator = result.iterator();
 			while (resultIterator.hasNext()) {
 				resultUser = resultIterator.next();
 				Log.info("[Othello Game Server]" + resultUser.getUsername()
 						+ " logout.");
+
+				// update useronline table
+				Transaction transaction = session.beginTransaction();
+				UserOnline userOnline = new UserOnline();
+				userOnline.setUserId(resultUser.getUserId());
+				userOnline.setOnlineState(UserOnline.OFFLINE);
+				session.save(userOnline);
+				transaction.commit();
+
+				// send feedback
 				processResponse.setResponseState(true);
 				kryonetServer.sendToTCP(connection.getID(), processResponse);
+
+				// send to other user
+				List<UserInformation> userInformationList = session
+						.createCriteria(UserInformation.class)
+						.add(Restrictions.eq("userId", resultUser.getUserId()))
+						.list();
+				if (userInformationList.size() > 0) {
+					UserInformation userInformation = null;
+					Iterator<UserInformation> userInformationIterator = userInformationList
+							.iterator();
+					while (userInformationIterator.hasNext()) {
+						userInformation = userInformationIterator.next();
+						broadcastMessageExcept(connection.getID(),
+								userInformation.getNickname() + "退出了游戏大厅。");
+					}
+				}
 			}
+		} else {
+			processResponse.setResponseState(false);
+			kryonetServer.sendToTCP(connection.getID(), processResponse);
 		}
+		session.close();
 	}
 
 	public void doGetUserInformation(Connection connection,
@@ -202,6 +235,26 @@ public class OthelloGameServerEnd {
 				&& sendMessage.getMessage() != null
 				&& sendMessage.getMessageTime() != null) {
 			kryonetServer.sendToAllTCP(sendMessage);
+		}
+	}
+
+	public void broadcastMessage(String message) {
+		if (message != null && message.length() > 0) {
+			SendMessage sendMessage = new SendMessage();
+			sendMessage.setNickname("[服务器]");
+			sendMessage.setMessage(message);
+			sendMessage.setMessageTime(new Date());
+			kryonetServer.sendToAllTCP(sendMessage);
+		}
+	}
+
+	public void broadcastMessageExcept(int connectId, String message) {
+		if (message != null && message.length() > 0) {
+			SendMessage sendMessage = new SendMessage();
+			sendMessage.setNickname("[服务器]");
+			sendMessage.setMessage(message);
+			sendMessage.setMessageTime(new Date());
+			kryonetServer.sendToAllExceptTCP(connectId, sendMessage);
 		}
 	}
 

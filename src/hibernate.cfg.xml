@@ -34,6 +34,8 @@
 		<mapping resource="otakuplus/straybird/othellogameserver/model/User.hbm.xml" />
 		<mapping
 			resource="otakuplus/straybird/othellogameserver/model/UserInformation.hbm.xml" />
+		<mapping
+			resource="otakuplus/straybird/othellogameserver/model/UserOnline.hbm.xml" />
 
 	</session-factory>
 
