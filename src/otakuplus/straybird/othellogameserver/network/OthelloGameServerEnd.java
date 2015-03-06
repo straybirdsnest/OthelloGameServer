@@ -70,7 +70,14 @@ public class OthelloGameServerEnd {
 			Transaction transaction = session.beginTransaction();
 			User user = registerUser.getUser();
 			UserInformation userInformation = registerUser.getUserInformation();
-			session.save(user);
+
+			/*
+			 * very important to set userInformation's id as in the database,
+			 * userInformation table doesn't use auto increment and does use
+			 * foreign key.
+			 */
+			int userId = (int) session.save(user);
+			userInformation.setUserId(userId);
 			session.save(userInformation);
 			transaction.commit();
 			session.close();
@@ -104,31 +111,39 @@ public class OthelloGameServerEnd {
 					kryonetServer
 							.sendToTCP(connection.getID(), processResponse);
 					// update useronline table
-					Transaction transaction = session.beginTransaction();
+					Transaction transaction = null;
 					UserOnline userOnline = new UserOnline();
 					userOnline.setUserId(resultUser.getUserId());
 					System.out.println("login id" + userOnline.getUserId());
 					userOnline.setOnlineState(UserOnline.ONLINE);
-					// use save or update in case that row is exist
-					session.saveOrUpdate(userOnline);
-					transaction.commit();
+					try {
+						// use save or update in case that row is exist
+						transaction = session.beginTransaction();
+						session.saveOrUpdate(userOnline);
+						transaction.commit();
+						// send back user to client
+						kryonetServer.sendToTCP(connection.getID(), resultUser);
 
-					// send back user to client
-					kryonetServer.sendToTCP(connection.getID(), resultUser);
-
-					// send login message
-					List<UserInformation> userInformationList = session
-							.createCriteria(UserInformation.class)
-							.add(Restrictions.eq("userId",
-									resultUser.getUserId())).list();
-					if (userInformationList.size() > 0) {
-						UserInformation userInformation = null;
-						Iterator<UserInformation> userInformationIterator = userInformationList
-								.iterator();
-						while (userInformationIterator.hasNext()) {
-							userInformation = userInformationIterator.next();
-							broadcastMessage(userInformation.getNickname()
-									+ "进入了游戏大厅。");
+						// send login message
+						List<UserInformation> userInformationList = session
+								.createCriteria(UserInformation.class)
+								.add(Restrictions.eq("userId",
+										resultUser.getUserId())).list();
+						if (userInformationList.size() > 0) {
+							UserInformation userInformation = null;
+							Iterator<UserInformation> userInformationIterator = userInformationList
+									.iterator();
+							while (userInformationIterator.hasNext()) {
+								userInformation = userInformationIterator
+										.next();
+								broadcastMessage(userInformation.getNickname()
+										+ "进入了游戏大厅。");
+							}
+						}
+					} catch (Exception e) {
+						if (transaction != null) {
+							transaction.rollback();
+							e.printStackTrace();
 						}
 					}
 				}
