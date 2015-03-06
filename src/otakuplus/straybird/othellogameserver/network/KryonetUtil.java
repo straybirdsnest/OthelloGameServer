@@ -20,6 +20,7 @@ public class KryonetUtil {
 		kryo.addDefaultSerializer(Date.class, DateSerializer.class);
 		kryo.addDefaultSerializer(Timestamp.class, DateSerializer.class);
 		kryo.register(Timestamp.class);
+		kryo.register(Date.class);
 		kryo.register(java.util.Date.class);
 
 		kryo.register(Login.class);

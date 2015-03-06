@@ -6,7 +6,6 @@ public class UserInformation {
 	public static final String SEXUALITY_MALE = "male";
 	public static final String SEXUALITY_FEMALE = "female";
 	private int userId;
-	private User user;
 	private String nickname = null;
 	private String sexuality = null;
 	private Date birthday = null;
@@ -21,14 +20,6 @@ public class UserInformation {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public Date getBirthday() {

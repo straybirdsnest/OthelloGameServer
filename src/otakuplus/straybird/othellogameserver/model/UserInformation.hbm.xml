@@ -10,7 +10,6 @@
 				<param name="property">user</param>
 			</generator>
 		</id>
-		<one-to-one name="user" class="User" constrained="true" />
 		<property name="nickname" />
 		<property name="birthday" type="date" />
 		<property name="gameWins" column="game_wins" />

@@ -70,15 +70,16 @@ public class OthelloGameServerEnd {
 			List<User> result = session.createCriteria(User.class)
 					.add(Restrictions.eq("username", username))
 					.add(Restrictions.eq("password", password)).list();
-			session.close();
 			if (result.size() > 0) {
 				Iterator<User> usersIterator = result.iterator();
 				User resultUser = null;
 				while (usersIterator.hasNext()) {
 					resultUser = usersIterator.next();
-					System.out.println(resultUser.getUsername()+"create_at"+resultUser.getCreateTime());
+					System.out.println(resultUser.getUsername() + "create_at"
+							+ resultUser.getCreateTime());
 					Log.info("[Othello Game Server]" + resultUser.getUsername()
 							+ " login.");
+
 					processResponse.setRequestType(ProcessResponse.LOGIN);
 					processResponse.setResponseState(true);
 					processResponse.setRequestBody(login);
@@ -94,6 +95,8 @@ public class OthelloGameServerEnd {
 					sendMessage.setMessageTime(new Date());
 					kryonetServer.sendToAllTCP(sendMessage);
 				}
+				session.close();
+
 			} else {
 				Log.info("[Othello Game Server] Connection "
 						+ connection.getID() + " Login failed!");
@@ -135,7 +138,7 @@ public class OthelloGameServerEnd {
 				.createCriteria(UserInformation.class)
 				.add(Restrictions.eq("userId", userId)).list();
 		session.close();
-		System.out.println("Get User Information:"+result.size());
+		System.out.println("Get User Information:" + result.size());
 		if (result.size() > 0) {
 			Iterator<UserInformation> resultIterator = result.iterator();
 			while (resultIterator.hasNext()) {
