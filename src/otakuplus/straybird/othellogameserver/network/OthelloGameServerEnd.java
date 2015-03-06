@@ -107,8 +107,10 @@ public class OthelloGameServerEnd {
 					Transaction transaction = session.beginTransaction();
 					UserOnline userOnline = new UserOnline();
 					userOnline.setUserId(resultUser.getUserId());
+					System.out.println("login id" + userOnline.getUserId());
 					userOnline.setOnlineState(UserOnline.ONLINE);
-					session.save(userOnline);
+					// use save or update in case that row is exist
+					session.saveOrUpdate(userOnline);
 					transaction.commit();
 
 					// send back user to client
@@ -165,7 +167,7 @@ public class OthelloGameServerEnd {
 				UserOnline userOnline = new UserOnline();
 				userOnline.setUserId(resultUser.getUserId());
 				userOnline.setOnlineState(UserOnline.OFFLINE);
-				session.save(userOnline);
+				session.saveOrUpdate(userOnline);
 				transaction.commit();
 
 				// send feedback
@@ -220,7 +222,7 @@ public class OthelloGameServerEnd {
 				.getUserInformation();
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = session.beginTransaction();
-		session.save(userInformation);
+		session.saveOrUpdate(userInformation);
 		transaction.commit();
 		session.close();
 	}

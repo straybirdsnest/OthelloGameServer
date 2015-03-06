@@ -6,7 +6,7 @@
 <hibernate-mapping package="otakuplus.straybird.othellogameserver.model">
 	<class name="User" table="OthelloUser">
 		<id name="userId" type="int" column="user_id">
-			<generator class="increment" />
+			<generator class="identity" />
 		</id>
 		<property name="username" />
 		<property name="emailAddress" column="email" />
