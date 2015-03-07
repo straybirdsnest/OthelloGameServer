@@ -27,7 +27,7 @@ public class ProcessResponse {
 		this.requestBody = requestBody;
 	}
 
-	public boolean isResponseState() {
+	public boolean getResponseState() {
 		return responseState;
 	}
 
