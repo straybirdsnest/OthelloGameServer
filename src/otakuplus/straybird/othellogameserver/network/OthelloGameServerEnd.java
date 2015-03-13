@@ -24,11 +24,7 @@ public class OthelloGameServerEnd {
 	protected Server kryonetServer;
 
 	public OthelloGameServerEnd() throws IOException {
-		kryonetServer = new Server() {
-			protected Connection newConnection() {
-				return new OthelloGameConnection();
-			}
-		};
+		kryonetServer = new Server();
 
 		KryonetUtil.register(kryonetServer);
 
@@ -188,35 +184,50 @@ public class OthelloGameServerEnd {
 						+ " logout.");
 
 				// update useronline table
-				Transaction transaction = session.beginTransaction();
-				UserOnline userOnline = new UserOnline();
-				userOnline.setUserId(resultUser.getUserId());
-				userOnline.setOnlineState(UserOnline.OFFLINE);
-				session.saveOrUpdate(userOnline);
-				transaction.commit();
+				Transaction transaction = null;
+				try {
+					transaction = session.beginTransaction();
+					UserOnline userOnline = new UserOnline();
+					userOnline.setUserId(resultUser.getUserId());
+					userOnline.setOnlineState(UserOnline.OFFLINE);
+					session.saveOrUpdate(userOnline);
+					transaction.commit();
 
-				// send feedback
-				processResponse.setResponseState(true);
-				kryonetServer.sendToTCP(connection.getID(), processResponse);
+					// send feedback
+					processResponse.setResponseState(true);
+					kryonetServer
+							.sendToTCP(connection.getID(), processResponse);
+					// send to other user
+					List<UserInformation> userInformationList = session
+							.createCriteria(UserInformation.class)
+							.add(Restrictions.eq("userId",
+									resultUser.getUserId())).list();
+					if (userInformationList.size() > 0) {
+						UserInformation userInformation = null;
+						Iterator<UserInformation> userInformationIterator = userInformationList
+								.iterator();
+						while (userInformationIterator.hasNext()) {
+							userInformation = userInformationIterator.next();
+							broadcastMessageExcept(connection.getID(),
+									userInformation.getNickname() + "退出了游戏大厅。");
+						}
+					}
+				} catch (Exception e) {
+					if (transaction != null) {
+						transaction.rollback();
 
-				// send to other user
-				List<UserInformation> userInformationList = session
-						.createCriteria(UserInformation.class)
-						.add(Restrictions.eq("userId", resultUser.getUserId()))
-						.list();
-				if (userInformationList.size() > 0) {
-					UserInformation userInformation = null;
-					Iterator<UserInformation> userInformationIterator = userInformationList
-							.iterator();
-					while (userInformationIterator.hasNext()) {
-						userInformation = userInformationIterator.next();
-						broadcastMessageExcept(connection.getID(),
-								userInformation.getNickname() + "退出了游戏大厅。");
+						processResponse.setResponseState(false);
+						processResponse.setRequestType(ProcessResponse.LOGOUT);
+						processResponse.setRequestBody(logout);
+						kryonetServer.sendToTCP(connection.getID(),
+								processResponse);
 					}
 				}
 			}
 		} else {
 			processResponse.setResponseState(false);
+			processResponse.setRequestType(ProcessResponse.LOGOUT);
+			processResponse.setRequestBody(logout);
 			kryonetServer.sendToTCP(connection.getID(), processResponse);
 		}
 		session.close();
