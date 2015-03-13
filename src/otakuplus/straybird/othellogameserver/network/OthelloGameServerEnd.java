@@ -124,7 +124,7 @@ public class OthelloGameServerEnd {
 						// send back user to client
 						kryonetServer.sendToTCP(connection.getID(), resultUser);
 
-						// send login message
+						// send login message to all users
 						List<UserInformation> userInformationList = session
 								.createCriteria(UserInformation.class)
 								.add(Restrictions.eq("userId",
@@ -138,6 +138,9 @@ public class OthelloGameServerEnd {
 										.next();
 								broadcastMessage(userInformation.getNickname()
 										+ "进入了游戏大厅。");
+								// send login userinformatio to other users
+								kryonetServer.sendToAllExceptTCP(
+										connection.getID(), userInformation);
 							}
 						}
 					} catch (Exception e) {
@@ -197,7 +200,7 @@ public class OthelloGameServerEnd {
 					processResponse.setResponseState(true);
 					kryonetServer
 							.sendToTCP(connection.getID(), processResponse);
-					// send to other user
+					// send logout message to other users
 					List<UserInformation> userInformationList = session
 							.createCriteria(UserInformation.class)
 							.add(Restrictions.eq("userId",
@@ -211,6 +214,9 @@ public class OthelloGameServerEnd {
 							broadcastMessageExcept(connection.getID(),
 									userInformation.getNickname() + "退出了游戏大厅。");
 						}
+						// send logout to other users
+						kryonetServer.sendToAllExceptTCP(connection.getID(),
+								logout);
 					}
 				} catch (Exception e) {
 					if (transaction != null) {
