@@ -4,16 +4,12 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="otakuplus.straybird.model">
-  <class name="GameRecord" table="OthelloGameRecord">
-    <id name="gameRecordId" type="int" column="idGameRecord">
+  <class name="GameTable" table="OthelloGameTable">
+    <id name="gameTableId" type="int" column="idGameTable">
       <generator class="increment"/>
     </id>
     <property name="playerAId" column = "playerA_id"/>
     <property name="playerBId" type="playerB_id" />
-    <property name="gameBeginTime" column="game_begin_time" />
-    <property name="gameEndTime" column="game_end_time" />
-    <property name="whiteNumber" column="white_number" />
-    <property name="blackNumber" column="black_number" />
 
   </class>
 </hibernate-mapping>
