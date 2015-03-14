@@ -1,6 +1,7 @@
 package otakuplus.straybird.othellogameserver.network;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -193,7 +194,7 @@ public class OthelloGameServerEnd {
 					UserOnline userOnline = new UserOnline();
 					userOnline.setUserId(resultUser.getUserId());
 					userOnline.setOnlineState(UserOnline.OFFLINE);
-					session.saveOrUpdate(userOnline);
+					session.update(userOnline);
 					transaction.commit();
 
 					// send feedback
@@ -264,14 +265,34 @@ public class OthelloGameServerEnd {
 				.getUserInformation();
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = session.beginTransaction();
-		session.saveOrUpdate(userInformation);
+		session.update(userInformation);
 		transaction.commit();
 		session.close();
 	}
 
 	public void doGetUserOnlineList(Connection connection,
 			GetUserOnlineList getUserOnlineList) {
-
+		int from = getUserOnlineList.getFromNumber();
+		int to = getUserOnlineList.getToNumber();
+		ProcessResponse processResponse = new ProcessResponse();
+		processResponse.setRequestType(ProcessResponse.GET_USER_ONLINE_LIST);
+		processResponse.setRequestBody(getUserOnlineList);
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			// use HQL instead of Criteria
+			ArrayList<UserInformation> queryResultList = (ArrayList<UserInformation>) session
+					.createQuery(
+							"select userInformation from UserInformation userInformation, UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <> "
+									+ UserOnline.OFFLINE).list();
+			if (queryResultList.size() > 0) {
+				kryonetServer.sendToTCP(connection.getID(), queryResultList);
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			processResponse.setResponseState(false);
+			kryonetServer.sendToTCP(connection.getID(), processResponse);
+		}
+		session.close();
 	}
 
 	public void doSendMessage(SendMessage sendMessage) {

@@ -1,12 +1,8 @@
 package otakuplus.straybird.othellogameserver.model;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 
 public class HibernateTest {
 
@@ -28,9 +24,8 @@ public class HibernateTest {
 			}
 		}
 		*/
-		
+		/*
 		Transaction transaction = session.beginTransaction();
-		
 		// Hibernate can auto set id when id = 0 or null
 		User user = new User();
 		userInformation = new UserInformation();
@@ -50,6 +45,11 @@ public class HibernateTest {
 		session.save(user);
 		session.save(userInformation);
 		transaction.commit();
+		*/
+		ArrayList<UserInformation> queryResult = (ArrayList<UserInformation>) session.createQuery(
+				"select userInformation from UserInformation userInformation, UserOnline userOnline where userOnline.onlineState <> "
+						+ UserOnline.OFFLINE).list();
+		System.out.println(queryResult.size());
 		session.close();
 	}
 }

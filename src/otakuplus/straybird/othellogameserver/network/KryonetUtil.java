@@ -2,6 +2,7 @@ package otakuplus.straybird.othellogameserver.network;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import otakuplus.straybird.othellogameserver.model.User;
 import otakuplus.straybird.othellogameserver.model.UserInformation;
@@ -22,6 +23,7 @@ public class KryonetUtil {
 		kryo.register(Timestamp.class);
 		kryo.register(Date.class);
 		kryo.register(java.util.Date.class);
+		kryo.register(ArrayList.class);
 
 		kryo.register(Login.class);
 		kryo.register(Logout.class);
@@ -30,6 +32,7 @@ public class KryonetUtil {
 		kryo.register(GetUserInformation.class);
 		kryo.register(UserInformation.class);
 		kryo.register(SendMessage.class);
+		kryo.register(GetUserOnlineList.class);
 
 	}
 
