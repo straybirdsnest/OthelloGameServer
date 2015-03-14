@@ -2,6 +2,7 @@ package otakuplus.straybird.othellogameserver.model;
 
 import java.util.ArrayList;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 public class HibernateTest {
@@ -46,10 +47,11 @@ public class HibernateTest {
 		session.save(userInformation);
 		transaction.commit();
 		*/
-		ArrayList<UserInformation> queryResult = (ArrayList<UserInformation>) session.createQuery(
-				"select userInformation from UserInformation userInformation, UserOnline userOnline where userOnline.onlineState <> "
-						+ UserOnline.OFFLINE).list();
-		System.out.println(queryResult.size());
+		Query query = session
+				.createQuery("select count(userInformation) from UserInformation userInformation, UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <>"
+		+ UserOnline.OFFLINE);
+		System.
+		out.println("query number:"+((Long)query.list().iterator().next()).longValue());
 		session.close();
 	}
 }

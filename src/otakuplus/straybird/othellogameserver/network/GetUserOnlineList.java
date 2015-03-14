@@ -2,7 +2,7 @@ package otakuplus.straybird.othellogameserver.network;
 
 public class GetUserOnlineList {
 	private int fromNumber = 0;
-	private int toNumber = 50;
+	private int maxNumber = 50;
 
 	public int getFromNumber() {
 		return fromNumber;
@@ -12,12 +12,12 @@ public class GetUserOnlineList {
 		this.fromNumber = fromNumber;
 	}
 
-	public int getToNumber() {
-		return toNumber;
+	public int getMaxNumber() {
+		return maxNumber;
 	}
 
-	public void setToNumber(int toNumber) {
-		this.toNumber = toNumber;
+	public void setMaxNumber(int toNumber) {
+		this.maxNumber = toNumber;
 	}
 
 	public static void main(String[] args) {

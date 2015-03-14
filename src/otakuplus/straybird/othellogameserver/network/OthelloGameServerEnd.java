@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -272,21 +273,39 @@ public class OthelloGameServerEnd {
 
 	public void doGetUserOnlineList(Connection connection,
 			GetUserOnlineList getUserOnlineList) {
-		int from = getUserOnlineList.getFromNumber();
-		int to = getUserOnlineList.getToNumber();
+		int fromNumber = getUserOnlineList.getFromNumber();
+		int maxNumber = getUserOnlineList.getMaxNumber();
 		ProcessResponse processResponse = new ProcessResponse();
 		processResponse.setRequestType(ProcessResponse.GET_USER_ONLINE_LIST);
 		processResponse.setRequestBody(getUserOnlineList);
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			// use HQL instead of Criteria
-			ArrayList<UserInformation> queryResultList = (ArrayList<UserInformation>) session
-					.createQuery(
-							"select userInformation from UserInformation userInformation, UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <> "
-									+ UserOnline.OFFLINE).list();
-			if (queryResultList.size() > 0) {
-				kryonetServer.sendToTCP(connection.getID(), queryResultList);
+			Query query = session
+					.createQuery("select count(userInformation) from UserInformation userInformation,UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <>"
+							+ UserOnline.OFFLINE);
+			long countNumber = (Long) query.list().iterator().next();
+			if (countNumber > 0) {
+				query = session
+						.createQuery("select userInformation from UserInformation userInformation, UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <> "
+								+ UserOnline.OFFLINE
+								+ " order by userInformation.userId asc");
+				if (fromNumber < countNumber) {
+					query.setFirstResult(fromNumber);
+					if (maxNumber > 50) {
+						query.setMaxResults(50);
+					} else {
+						query.setMaxResults(maxNumber);
+					}
+					ArrayList<UserInformation> queryResultList = (ArrayList<UserInformation>) query
+							.list();
+					if (queryResultList.size() > 0) {
+						kryonetServer.sendToTCP(connection.getID(),
+								queryResultList);
+					}
+				}
 			}
+
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			processResponse.setResponseState(false);
