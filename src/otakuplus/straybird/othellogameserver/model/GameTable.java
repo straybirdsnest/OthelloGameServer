@@ -3,8 +3,8 @@ package otakuplus.straybird.othellogameserver.model;
 public class GameTable {
 
 	private int gameTableId;
-	private int playerAId;
-	private int playerBId;
+	private Integer playerAId;
+	private Integer playerBId;
 
 	public int getGameTableId() {
 		return gameTableId;
@@ -14,19 +14,19 @@ public class GameTable {
 		this.gameTableId = gameTableId;
 	}
 
-	public int getPlayerAId() {
+	public Integer getPlayerAId() {
 		return playerAId;
 	}
 
-	public void setPlayerAId(int playerAId) {
+	public void setPlayerAId(Integer playerAId) {
 		this.playerAId = playerAId;
 	}
 
-	public int getPlayerBId() {
+	public Integer getPlayerBId() {
 		return playerBId;
 	}
 
-	public void setPlayerBId(int playerBId) {
+	public void setPlayerBId(Integer playerBId) {
 		this.playerBId = playerBId;
 	}
 

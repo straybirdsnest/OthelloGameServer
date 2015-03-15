@@ -7,6 +7,7 @@ public class ProcessResponse {
 	public static int GET_USER_INFO = 103;
 	public static int GET_USER_ONLINE_LIST = 104;
 	public static int GET_GAME_TABLE_LIST = 105;
+	public static int UPDATE_GAME_TABLE = 106;
 
 	private int requestType;
 	private Object requestBody;

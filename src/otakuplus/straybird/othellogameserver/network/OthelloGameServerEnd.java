@@ -369,7 +369,7 @@ public class OthelloGameServerEnd {
 					Criteria gameTableCriteria = session
 							.createCriteria(GameTable.class);
 					gameTableCriteria.add(Restrictions.isNotNull("playerAId"));
-					gameTableCriteria.add(Restrictions.isNotNull("palyerBId"));
+					gameTableCriteria.add(Restrictions.isNotNull("playerBId"));
 					gameTableCriteria.setFirstResult(fromNumber);
 					gameTableCriteria.setMaxResults(maxNumber);
 					ArrayList<GameTable> gameTableList = (ArrayList<GameTable>) gameTableCriteria
@@ -390,7 +390,78 @@ public class OthelloGameServerEnd {
 
 	public void doUpdateGameTable(Connection connection,
 			UpdateGameTable updateGameTable) {
-
+		int userId = updateGameTable.getUserId();
+		int tableId = updateGameTable.getGameTableId();
+		int tablePosition = updateGameTable.getTablePosition();
+		ProcessResponse processResponse = new ProcessResponse();
+		processResponse.setRequestBody(updateGameTable);
+		processResponse.setRequestType(ProcessResponse.UPDATE_GAME_TABLE);
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		GameTable gameTable = null;
+		ArrayList<GameTable> gameTableList = null;
+		Iterator<GameTable> gameTableIterator = null;
+		boolean proceFlag = true;
+		try {
+			transaction = session.beginTransaction();
+			if (updateGameTable.getAction() == UpdateGameTable.ACTION_TAKE) {
+				gameTableList = (ArrayList<GameTable>) session
+						.createCriteria(GameTable.class)
+						.add(Restrictions.eq("gameTableId", tableId)).list();
+				if (gameTableList.size() > 0) {
+					gameTableIterator = gameTableList.iterator();
+					while (gameTableIterator.hasNext()) {
+						boolean findPosition = false;
+						gameTable = gameTableIterator.next();
+						if (tablePosition == 1) {
+							if (gameTable.getPlayerAId() == null) {
+								gameTable.setPlayerAId(userId);
+								session.update(gameTable);
+							} else {
+								proceFlag = false;
+							}
+						}
+						if (tablePosition == 2) {
+							if (gameTable.getPlayerBId() == null) {
+								gameTable.setPlayerBId(userId);
+								session.update(gameTable);
+							} else {
+								proceFlag = false;
+							}
+						}
+					}
+				} else if (updateGameTable.getAction() == UpdateGameTable.ACTION_LEFT) {
+					Query query = session
+							.createQuery("select gameTable from GameTable gameTable where gameTable.playerAId = "
+									+ userId
+									+ " or gameTable.playerBId = "
+									+ userId);
+					gameTableList = (ArrayList<GameTable>) query.list();
+					if (gameTableList.size() > 0) {
+						gameTableIterator = gameTableList.iterator();
+						while (gameTableIterator.hasNext()) {
+							gameTable = gameTableIterator.next();
+						}
+						session.update(gameTable);
+					}
+				}
+			}
+			transaction.commit();
+			if (proceFlag == true) {
+				kryonetServer.sendToTCP(connection.getID(), gameTable);
+			} else {
+				processResponse.setResponseState(false);
+				kryonetServer.sendToTCP(connection.getID(), processResponse);
+			}
+		} catch (Exception exception) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			exception.printStackTrace();
+			processResponse.setResponseState(false);
+			kryonetServer.sendToTCP(connection.getID(), processResponse);
+		}
+		session.close();
 	}
 
 	public static void main(String[] args) throws IOException {
