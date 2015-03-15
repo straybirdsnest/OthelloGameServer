@@ -1,9 +1,8 @@
 package otakuplus.straybird.othellogameserver.model;
 
-import java.util.ArrayList;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class HibernateTest {
 
@@ -25,8 +24,9 @@ public class HibernateTest {
 			}
 		}
 		*/
-		/*
+		
 		Transaction transaction = session.beginTransaction();
+		/*
 		// Hibernate can auto set id when id = 0 or null
 		User user = new User();
 		userInformation = new UserInformation();
@@ -42,9 +42,15 @@ public class HibernateTest {
 		userInformation.setGameDraws(3);
 		userInformation.setGameLosts(20);
 		userInformation.setRankPoints(23);
-		 
 		session.save(user);
 		session.save(userInformation);
+		
+		for(int i=1;i<100;i++){
+			GameTable gameTable = new GameTable();
+			gameTable.setPlayerAId(1);
+			gameTable.setPlayerBId(2);
+			session.save(gameTable);
+		}
 		transaction.commit();
 		*/
 		Query query = session

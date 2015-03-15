@@ -3,13 +3,13 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package="otakuplus.straybird.model">
+<hibernate-mapping package="otakuplus.straybird.othellogameserver.model">
   <class name="GameTable" table="OthelloGameTable">
     <id name="gameTableId" type="int" column="idGameTable">
       <generator class="increment"/>
     </id>
     <property name="playerAId" column = "playerA_id"/>
-    <property name="playerBId" type="playerB_id" />
+    <property name="playerBId" column="playerB_id" />
 
   </class>
 </hibernate-mapping>
