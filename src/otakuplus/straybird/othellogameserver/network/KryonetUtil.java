@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import otakuplus.straybird.othellogameserver.model.GameTable;
 import otakuplus.straybird.othellogameserver.model.User;
 import otakuplus.straybird.othellogameserver.model.UserInformation;
 
@@ -33,6 +34,9 @@ public class KryonetUtil {
 		kryo.register(UserInformation.class);
 		kryo.register(SendMessage.class);
 		kryo.register(GetUserOnlineList.class);
+		kryo.register(GameTable.class);
+		kryo.register(UpdateGameTable.class);
+		kryo.register(GetGameTableList.class);
 
 	}
 

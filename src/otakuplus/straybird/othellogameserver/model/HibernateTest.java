@@ -24,9 +24,9 @@ public class HibernateTest {
 			}
 		}
 		*/
-		
-		Transaction transaction = session.beginTransaction();
 		/*
+		Transaction transaction = session.beginTransaction();
+		
 		// Hibernate can auto set id when id = 0 or null
 		User user = new User();
 		userInformation = new UserInformation();
@@ -54,10 +54,9 @@ public class HibernateTest {
 		transaction.commit();
 		*/
 		Query query = session
-				.createQuery("select count(userInformation) from UserInformation userInformation, UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <>"
-		+ UserOnline.OFFLINE);
+				.createQuery("select count(gameTable) from GameTable gameTable where gameTable.playerAId is not null or gameTable.playerBId is not null ");
 		System.
-		out.println("query number:"+((Long)query.list().iterator().next()).longValue());
+		out.println("query number:"+((Number)query.iterate().next()).longValue());
 		session.close();
 	}
 }

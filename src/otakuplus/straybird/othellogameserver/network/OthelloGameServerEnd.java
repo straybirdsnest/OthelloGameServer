@@ -6,11 +6,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
+import otakuplus.straybird.othellogameserver.model.GameTable;
 import otakuplus.straybird.othellogameserver.model.HibernateUtil;
 import otakuplus.straybird.othellogameserver.model.User;
 import otakuplus.straybird.othellogameserver.model.UserInformation;
@@ -34,7 +36,7 @@ public class OthelloGameServerEnd {
 			public void received(Connection connection, Object object) {
 				if (object instanceof RegisterUser) {
 					RegisterUser registerUser = (RegisterUser) object;
-					doRegisterUser(registerUser);
+					doRegisterUser(connection, registerUser);
 				} else if (object instanceof Login) {
 					Login login = (Login) object;
 					doLogin(connection, login);
@@ -50,6 +52,12 @@ public class OthelloGameServerEnd {
 				} else if (object instanceof SendMessage) {
 					SendMessage sendMessage = (SendMessage) object;
 					doSendMessage(sendMessage);
+				} else if (object instanceof GetGameTableList) {
+					GetGameTableList getGameTableList = (GetGameTableList) object;
+					doGetGameTableList(connection, getGameTableList);
+				} else if (object instanceof UpdateGameTable) {
+					UpdateGameTable updateGameTable = (UpdateGameTable) object;
+					doUpdateGameTable(connection, updateGameTable);
 				}
 			}
 
@@ -61,7 +69,7 @@ public class OthelloGameServerEnd {
 		kryonetServer.start();
 	}
 
-	public void doRegisterUser(RegisterUser registerUser) {
+	public void doRegisterUser(Connection connection, RegisterUser registerUser) {
 		if (registerUser.getUser() != null
 				&& registerUser.getUserInformation() != null) {
 			Session session = HibernateUtil.getSessionFactory().openSession();
@@ -284,7 +292,7 @@ public class OthelloGameServerEnd {
 			Query query = session
 					.createQuery("select count(userInformation) from UserInformation userInformation,UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <>"
 							+ UserOnline.OFFLINE);
-			long countNumber = (Long) query.list().iterator().next();
+			long countNumber = ((Number) query.iterate().next()).longValue();
 			if (countNumber > 0) {
 				query = session
 						.createQuery("select userInformation from UserInformation userInformation, UserOnline userOnline where userInformation.userId = userOnline.userId and userOnline.onlineState <> "
@@ -340,6 +348,49 @@ public class OthelloGameServerEnd {
 			sendMessage.setMessageTime(new Date());
 			kryonetServer.sendToAllExceptTCP(connectId, sendMessage);
 		}
+	}
+
+	public void doGetGameTableList(Connection connection,
+			GetGameTableList getGameTableList) {
+		int fromNumber = getGameTableList.getFromNumber();
+		int maxNumber = getGameTableList.getMaxNumber();
+		ProcessResponse processResponse = new ProcessResponse();
+		processResponse.setRequestType(ProcessResponse.GET_GAME_TABLE_LIST);
+		processResponse.setRequestBody(getGameTableList);
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+
+			Query query = session
+					.createQuery("select count(gameTable) from GameTable gameTable where gameTable.playerAId is not null or gameTable.playerBId is not null ");
+			long gameTableNumber = ((Number) query.iterate().next())
+					.longValue();
+			if (gameTableNumber > 0) {
+				if (fromNumber < gameTableNumber) {
+					Criteria gameTableCriteria = session
+							.createCriteria(GameTable.class);
+					gameTableCriteria.add(Restrictions.isNotNull("playerAId"));
+					gameTableCriteria.add(Restrictions.isNotNull("palyerBId"));
+					gameTableCriteria.setFirstResult(fromNumber);
+					gameTableCriteria.setMaxResults(maxNumber);
+					ArrayList<GameTable> gameTableList = (ArrayList<GameTable>) gameTableCriteria
+							.list();
+					kryonetServer.sendToTCP(connection.getID(), gameTableList);
+				}
+			} else if (gameTableNumber == 0) {
+				ArrayList<GameTable> gameTableList = new ArrayList<GameTable>();
+				kryonetServer.sendToTCP(connection.getID(), gameTableList);
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			processResponse.setResponseState(false);
+			kryonetServer.sendToTCP(connection.getID(), processResponse);
+		}
+		session.close();
+	}
+
+	public void doUpdateGameTable(Connection connection,
+			UpdateGameTable updateGameTable) {
+
 	}
 
 	public static void main(String[] args) throws IOException {
