@@ -431,18 +431,32 @@ public class OthelloGameServerEnd {
 						}
 					}
 				} else if (updateGameTable.getAction() == UpdateGameTable.ACTION_LEFT) {
-					Query query = session
-							.createQuery("select gameTable from GameTable gameTable where gameTable.playerAId = "
-									+ userId
-									+ " or gameTable.playerBId = "
-									+ userId);
-					gameTableList = (ArrayList<GameTable>) query.list();
+					gameTableList = (ArrayList<GameTable>) session
+							.createCriteria(GameTable.class)
+							.add(Restrictions.eq("gameTableId", tableId))
+							.list();
 					if (gameTableList.size() > 0) {
 						gameTableIterator = gameTableList.iterator();
 						while (gameTableIterator.hasNext()) {
+							boolean findPosition = false;
 							gameTable = gameTableIterator.next();
+							if (tablePosition == 1) {
+								if (gameTable.getPlayerAId() == userId) {
+									gameTable.setPlayerAId(null);
+									session.update(gameTable);
+								} else {
+									proceFlag = false;
+								}
+							}
+							if (tablePosition == 2) {
+								if (gameTable.getPlayerBId() == userId) {
+									gameTable.setPlayerBId(null);
+									session.update(gameTable);
+								} else {
+									proceFlag = false;
+								}
+							}
 						}
-						session.update(gameTable);
 					}
 				}
 			}
