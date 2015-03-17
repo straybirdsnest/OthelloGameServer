@@ -62,6 +62,7 @@ public class OthelloGameServerEnd {
 			}
 
 			public void disconnected(Connection connection) {
+
 			}
 		});
 
@@ -411,12 +412,12 @@ public class OthelloGameServerEnd {
 				if (gameTableList.size() > 0) {
 					gameTableIterator = gameTableList.iterator();
 					while (gameTableIterator.hasNext()) {
-						boolean findPosition = false;
 						gameTable = gameTableIterator.next();
 						if (tablePosition == 1) {
 							if (gameTable.getPlayerAId() == null) {
 								gameTable.setPlayerAId(userId);
 								session.update(gameTable);
+								kryonetServer.sendToTCP(connection.getID(), gameTable);
 							} else {
 								proceFlag = false;
 							}
@@ -425,6 +426,7 @@ public class OthelloGameServerEnd {
 							if (gameTable.getPlayerBId() == null) {
 								gameTable.setPlayerBId(userId);
 								session.update(gameTable);
+								kryonetServer.sendToTCP(connection.getID(), gameTable);
 							} else {
 								proceFlag = false;
 							}
@@ -444,6 +446,7 @@ public class OthelloGameServerEnd {
 								if (gameTable.getPlayerAId() == userId) {
 									gameTable.setPlayerAId(null);
 									session.update(gameTable);
+									kryonetServer.sendToTCP(connection.getID(), gameTable);
 								} else {
 									proceFlag = false;
 								}
@@ -452,6 +455,7 @@ public class OthelloGameServerEnd {
 								if (gameTable.getPlayerBId() == userId) {
 									gameTable.setPlayerBId(null);
 									session.update(gameTable);
+									kryonetServer.sendToTCP(connection.getID(), gameTable);
 								} else {
 									proceFlag = false;
 								}
@@ -462,7 +466,7 @@ public class OthelloGameServerEnd {
 			}
 			transaction.commit();
 			if (proceFlag == true) {
-				kryonetServer.sendToTCP(connection.getID(), gameTable);
+				
 			} else {
 				processResponse.setResponseState(false);
 				kryonetServer.sendToTCP(connection.getID(), processResponse);
