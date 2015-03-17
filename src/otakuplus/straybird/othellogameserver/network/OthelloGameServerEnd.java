@@ -417,7 +417,8 @@ public class OthelloGameServerEnd {
 							if (gameTable.getPlayerAId() == null) {
 								gameTable.setPlayerAId(userId);
 								session.update(gameTable);
-								kryonetServer.sendToTCP(connection.getID(), gameTable);
+								kryonetServer.sendToTCP(connection.getID(),
+										gameTable);
 							} else {
 								proceFlag = false;
 							}
@@ -426,39 +427,47 @@ public class OthelloGameServerEnd {
 							if (gameTable.getPlayerBId() == null) {
 								gameTable.setPlayerBId(userId);
 								session.update(gameTable);
-								kryonetServer.sendToTCP(connection.getID(), gameTable);
+								kryonetServer.sendToTCP(connection.getID(),
+										gameTable);
 							} else {
 								proceFlag = false;
 							}
 						}
 					}
-				} else if (updateGameTable.getAction() == UpdateGameTable.ACTION_LEFT) {
-					gameTableList = (ArrayList<GameTable>) session
-							.createCriteria(GameTable.class)
-							.add(Restrictions.eq("gameTableId", tableId))
-							.list();
-					if (gameTableList.size() > 0) {
-						gameTableIterator = gameTableList.iterator();
-						while (gameTableIterator.hasNext()) {
-							boolean findPosition = false;
-							gameTable = gameTableIterator.next();
-							if (tablePosition == 1) {
-								if (gameTable.getPlayerAId() == userId) {
-									gameTable.setPlayerAId(null);
-									session.update(gameTable);
-									kryonetServer.sendToTCP(connection.getID(), gameTable);
-								} else {
-									proceFlag = false;
-								}
+				}
+			}
+			if (updateGameTable.getAction() == UpdateGameTable.ACTION_LEFT) {
+				gameTableList = (ArrayList<GameTable>) session
+						.createCriteria(GameTable.class)
+						.add(Restrictions.eq("gameTableId", tableId)).list();
+				if (gameTableList.size() > 0) {
+					System.out.println("find the table");
+					gameTableIterator = gameTableList.iterator();
+					while (gameTableIterator.hasNext()) {
+						boolean findPosition = false;
+						gameTable = gameTableIterator.next();
+						if (tablePosition == 1) {
+							if (gameTable.getPlayerAId() == userId) {
+								gameTable.setPlayerAId(null);
+								session.update(gameTable);
+								processResponse.setResponseState(true);
+								kryonetServer.sendToTCP(connection.getID(),
+										processResponse);
+							} else {
+								proceFlag = false;
 							}
-							if (tablePosition == 2) {
-								if (gameTable.getPlayerBId() == userId) {
-									gameTable.setPlayerBId(null);
-									session.update(gameTable);
-									kryonetServer.sendToTCP(connection.getID(), gameTable);
-								} else {
-									proceFlag = false;
-								}
+						}
+						if (tablePosition == 2) {
+							System.out.println("find postion 2");
+							if (gameTable.getPlayerBId() == userId) {
+								gameTable.setPlayerBId(null);
+								session.update(gameTable);
+								processResponse.setResponseState(true);
+								kryonetServer.sendToTCP(connection.getID(),
+										processResponse);
+								System.out.println("send back leave true");
+							} else {
+								proceFlag = false;
 							}
 						}
 					}
@@ -466,7 +475,7 @@ public class OthelloGameServerEnd {
 			}
 			transaction.commit();
 			if (proceFlag == true) {
-				
+
 			} else {
 				processResponse.setResponseState(false);
 				kryonetServer.sendToTCP(connection.getID(), processResponse);
