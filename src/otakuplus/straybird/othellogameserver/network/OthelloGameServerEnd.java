@@ -441,7 +441,6 @@ public class OthelloGameServerEnd {
 						.createCriteria(GameTable.class)
 						.add(Restrictions.eq("gameTableId", tableId)).list();
 				if (gameTableList.size() > 0) {
-					System.out.println("find the table");
 					gameTableIterator = gameTableList.iterator();
 					while (gameTableIterator.hasNext()) {
 						boolean findPosition = false;
@@ -458,14 +457,12 @@ public class OthelloGameServerEnd {
 							}
 						}
 						if (tablePosition == 2) {
-							System.out.println("find postion 2");
 							if (gameTable.getPlayerBId() == userId) {
 								gameTable.setPlayerBId(null);
 								session.update(gameTable);
 								processResponse.setResponseState(true);
 								kryonetServer.sendToTCP(connection.getID(),
 										processResponse);
-								System.out.println("send back leave true");
 							} else {
 								proceFlag = false;
 							}
