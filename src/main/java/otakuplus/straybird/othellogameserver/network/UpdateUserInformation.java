@@ -1,20 +1,9 @@
 package otakuplus.straybird.othellogameserver.network;
 
-import otakuplus.straybird.othellogameserver.model.User;
 import otakuplus.straybird.othellogameserver.model.UserInformation;
 
-public class RegisterUser {
-
-	private User user;
+public class UpdateUserInformation {
 	private UserInformation userInformation;
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	public UserInformation getUserInformation() {
 		return userInformation;
@@ -22,11 +11,6 @@ public class RegisterUser {
 
 	public void setUserInformation(UserInformation userInformation) {
 		this.userInformation = userInformation;
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

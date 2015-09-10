@@ -22,14 +22,4 @@ public class Login {
 		this.password = password;
 	}
 
-	public static void main(String[] args) {
-		Login login = new Login();
-		login.setUsername("TestUser");
-		login.setPassword("TestPassowrd");
-		assert (login.getUsername().equals("TestUser"));
-		assert (login.getPassword().equals("TestPassword"));
-		System.out.println("Test on setter and getter :OK");
-
-	}
-
 }

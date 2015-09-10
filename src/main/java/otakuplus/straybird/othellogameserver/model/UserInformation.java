@@ -78,7 +78,4 @@ public class UserInformation {
 		this.rankPoints = rankPoints;
 	}
 
-	public static void main(String[] args) {
-
-	}
 }

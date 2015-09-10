@@ -29,9 +29,5 @@ public class GameTable {
 	public void setPlayerBId(Integer playerBId) {
 		this.playerBId = playerBId;
 	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	
 }

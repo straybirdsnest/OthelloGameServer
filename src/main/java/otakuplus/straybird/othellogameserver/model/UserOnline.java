@@ -25,9 +25,4 @@ public class UserOnline {
 		this.onlineState = onlineState;
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

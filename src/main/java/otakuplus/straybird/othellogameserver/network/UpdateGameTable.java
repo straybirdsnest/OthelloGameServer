@@ -44,8 +44,4 @@ public class UpdateGameTable {
 		this.action = action;
 	}
 
-	public static void main(String[] args) {
-
-	}
-
 }

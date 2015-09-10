@@ -37,7 +37,4 @@ public class ProcessResponse {
 		this.responseState = responseState;
 	}
 
-	public static void main(String[] args) {
-	}
-
 }

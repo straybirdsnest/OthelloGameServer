@@ -20,9 +20,4 @@ public class GetUserOnlineList {
 		this.maxNumber = toNumber;
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
