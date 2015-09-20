@@ -1,7 +1,7 @@
 /target/
-/blackserver/
+/othellogameserver/
 
-# MacOSX System Files 
+# MacOSX System Files
 .DS_Store
 
 # Eclipse Project Settings
@@ -13,3 +13,4 @@
 *.iml
 .idea/
 
+*.bak

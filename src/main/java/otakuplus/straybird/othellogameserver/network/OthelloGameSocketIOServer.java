@@ -1,5 +1,7 @@
 package otakuplus.straybird.othellogameserver.network;
 
+import java.sql.Timestamp;
+
 import org.json.JSONObject;
 
 import com.corundumstudio.socketio.AckRequest;
@@ -9,6 +11,8 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+
+import otakuplus.straybird.othellogameserver.models.User;
 
 public class OthelloGameSocketIOServer {
 	public static final int CHAT_SERVER_PORT = 8081;
@@ -25,9 +29,16 @@ public class OthelloGameSocketIOServer {
 
 			@Override
 			public void onConnect(SocketIOClient socketIOClient) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("Server", "user connected.");
-				socketIOServer.getBroadcastOperations().sendEvent("connect", jsonObject);
+				
+				User user = new User();
+				user.setUserId(1L);
+				user.setUsername("someuser");
+				user.setPassword("somepassword");
+				user.setEmailAddress("user@example");
+				user.setIsActive(true);
+				user.setCreateTime(new Timestamp(1000000));
+				
+				socketIOClient.sendEvent("connect", user);
 			}
 
 		});

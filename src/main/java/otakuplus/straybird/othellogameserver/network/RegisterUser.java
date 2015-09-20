@@ -1,7 +1,7 @@
 package otakuplus.straybird.othellogameserver.network;
 
-import otakuplus.straybird.othellogameserver.model.User;
-import otakuplus.straybird.othellogameserver.model.UserInformation;
+import otakuplus.straybird.othellogameserver.models.User;
+import otakuplus.straybird.othellogameserver.models.UserInformation;
 
 public class RegisterUser {
 
