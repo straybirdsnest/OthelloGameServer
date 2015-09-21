@@ -2,30 +2,52 @@ package otakuplus.straybird.othellogameserver.models;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "OthelloUserInformation")
 public class UserInformation {
-	public static final String SEXUALITY_MALE = "male";
-	public static final String SEXUALITY_FEMALE = "female";
+	public static final String GENDER_MALE = "male";
+	public static final String GENDER_FEMALE = "female";
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
 	@Id
 	private Long userInformationId;
+	
 	@MapsId
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="userId")
 	public User user;
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
 	private String nickname;
-	private String sexuality;
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
+	@NotNull
+	private String gender;
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
 	private Date birthday;
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
 	private int gameWins = 0;
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
 	private int gameDraws = 0;
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
 	private int gameLosts = 0;
+	
+	@JsonView(UserInformationView.ClientUserInformation.class)
 	private int rankPoints = 0;
 
 	public User getUser() {
@@ -48,12 +70,12 @@ public class UserInformation {
 		return birthday;
 	}
 
-	public String getSexuality() {
-		return sexuality;
+	public String getGender() {
+		return gender;
 	}
 
-	public void setSexuality(String sexuality) {
-		this.sexuality = sexuality;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getNickname() {
