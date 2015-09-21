@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import otakuplus.straybird.othellogameserver.models.User;
-import otakuplus.straybird.othellogameserver.models.UserDao;
+import otakuplus.straybird.othellogameserver.models.UserRepository;
 import otakuplus.straybird.othellogameserver.models.UserInformation;
 import otakuplus.straybird.othellogameserver.models.UserView;
 
@@ -19,16 +19,16 @@ import otakuplus.straybird.othellogameserver.models.UserView;
 public class UserController {
 
 	@Autowired
-	private UserDao userDao;
-	
+	private UserRepository userRepository;
+	/*
 	@JsonView(UserView.ClientUser.class)
-	@RequestMapping(value = "/User/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 	public User user(@PathVariable("userId") long userId) {
-		User user = userDao.findOne(userId);
+		User user = userRepository.findOne(userId);
 		return user;
 	}
-	
-	@RequestMapping(value = "/User/create", method = RequestMethod.GET)
+	*/
+	@RequestMapping(value = "/user/register", method = RequestMethod.GET)
 	public void createUser() {
 		User user = new User();
 		user.setUserId(1L);
@@ -48,7 +48,7 @@ public class UserController {
 		user.setUserInformation(userInformation);
 		userInformation.setUser(user);
 		
-		userDao.save(user);
+		userRepository.save(user);
 		
 	}
 	

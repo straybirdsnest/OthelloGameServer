@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import otakuplus.straybird.othellogameserver.models.UserInformation;
-import otakuplus.straybird.othellogameserver.models.UserInformationDao;
+import otakuplus.straybird.othellogameserver.models.UserInformationRepository;
 import otakuplus.straybird.othellogameserver.models.UserInformationView;
 
 @RestController
 public class UserInformationController {
 
 	@Autowired
-	private UserInformationDao userInformationDao;
+	private UserInformationRepository userInformationRepository;
 
 	@JsonView(UserInformationView.ClientUserInformation.class)
-	@RequestMapping(value = "/UserInformation/{userInformationId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/userinformation/{userInformationId}", method = RequestMethod.GET)
 	public UserInformation userInformation(@PathVariable("userInformationId") long userInformationId) {
-		UserInformation userInformation = userInformationDao.findOne(userInformationId);
+		UserInformation userInformation = userInformationRepository.findOne(userInformationId);
 		return userInformation;
 	}
 }

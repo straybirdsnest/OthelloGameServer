@@ -10,7 +10,7 @@ import otakuplus.straybird.othellogameserver.models.GameTable;
 @RestController
 public class GameHallController {
 	
-	@RequestMapping(value = "/GameTable/{tableId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/gametable/{tableId}", method = RequestMethod.GET)
 	GameTable gameTable(@PathVariable("tableId") int tableId){
 		GameTable gameTable = new GameTable();
 		return gameTable;

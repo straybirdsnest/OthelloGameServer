@@ -1,6 +1,6 @@
 package otakuplus.straybird.othellogameserver.models;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
@@ -37,8 +38,9 @@ public class User {
 	private String password;
 	
 	@JsonView(UserView.ClientUser.class)
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GTM+8")
 	@CreationTimestamp
-	private Timestamp createTime;
+	private Date createTime;
 	
 	@JsonView(UserView.ClientUser.class)
 	@NotNull
@@ -88,11 +90,11 @@ public class User {
 		this.emailAddress = emailAddress;
 	}
 
-	public Timestamp getCreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
