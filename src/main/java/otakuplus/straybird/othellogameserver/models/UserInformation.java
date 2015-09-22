@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
@@ -19,35 +20,36 @@ public class UserInformation {
 	public static final String GENDER_MALE = "male";
 	public static final String GENDER_FEMALE = "female";
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	@Id
 	private Long userInformationId;
-	
+
+	@JsonIgnore
 	@MapsId
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="userId")
 	public User user;
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	private String nickname;
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	@NotNull
 	private String gender;
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	private Date birthday;
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	private int gameWins = 0;
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	private int gameDraws = 0;
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	private int gameLosts = 0;
 	
-	@JsonView(UserInformationView.ClientUserInformation.class)
+	//@JsonView(UserInformationView.ClientUserInformation.class)
 	private int rankPoints = 0;
 
 	public User getUser() {

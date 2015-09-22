@@ -1,44 +1,43 @@
 package otakuplus.straybird.othellogameserver.models;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "OthelloUser")
 public class User {
 	
-	@JsonView(UserView.ClientUser.class)
+	//@JsonView(UserView.ClientUser.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
 	
-	@JsonView(UserView.ClientUser.class)
+	//@JsonView(UserView.ClientUser.class)
 	@NotNull
 	private String username;
 	
-	@JsonView(UserView.ClientUser.class)
+	//@JsonView(UserView.ClientUser.class)
 	@NotNull
 	private String emailAddress;
 
-	@JsonView(UserView.ClientUser.class)
+    @JsonIgnore
 	@NotNull
 	private String password;
-	
-	@JsonView(UserView.ClientUser.class)
-	//@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GTM+8")
+
+    //@JsonView(UserView.ClientUser.class)
 	@CreationTimestamp
-	private Date createTime;
+	@NotNull
+    private Date createTime;
 	
-	@JsonView(UserView.ClientUser.class)
+	//@JsonView(UserView.ClientUser.class)
 	@NotNull
 	private boolean isActive = false;
 	
@@ -46,10 +45,12 @@ public class User {
 	@PrimaryKeyJoinColumn
 	private UserInformation userInformation;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private UserOnline userOnline;
 
+    @JsonIgnore
     @OneToMany
     private List<GameRecord> gameRecords;
 
