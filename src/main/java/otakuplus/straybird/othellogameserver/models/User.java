@@ -1,15 +1,10 @@
 package otakuplus.straybird.othellogameserver.models;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,12 +28,13 @@ public class User {
 	@JsonView(UserView.ClientUser.class)
 	@NotNull
 	private String emailAddress;
-	
+
+	@JsonView(UserView.ClientUser.class)
 	@NotNull
 	private String password;
 	
 	@JsonView(UserView.ClientUser.class)
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GTM+8")
+	//@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GTM+8")
 	@CreationTimestamp
 	private Date createTime;
 	
@@ -46,9 +42,16 @@ public class User {
 	@NotNull
 	private boolean isActive = false;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade= CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private UserInformation userInformation;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserOnline userOnline;
+
+    @OneToMany
+    private List<GameRecord> gameRecords;
 
 	public User() {
 
@@ -114,4 +117,11 @@ public class User {
 		this.userInformation = userInformation;
 	}
 
+    public UserOnline getUserOnline(){
+        return this.userOnline;
+    }
+
+    public void setUserOnline(UserOnline userOnline){
+        this.userOnline = userOnline;
+    }
 }

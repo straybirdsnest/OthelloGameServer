@@ -1,39 +1,47 @@
 package otakuplus.straybird.othellogameserver.models;
 
+import javax.persistence.*;
+
 import java.util.Date;
 
+@Entity
+@Table(name = "OthelloGameRecord")
 public class GameRecord {
 
-	private int gameRecordId = 0;
-	private int playerAId = 0;
-	private int playerBId = 0;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long gameRecordId;
+    @OneToOne
+	private User playerA;
+	@OneToOne
+    private User playerB;
 	private Date gameBeginTime;
 	private Date gameEndTIme;
-	private int whiteNumber = 0;
-	private int blackNumber = 0;
+	private int whiteNumber;
+	private int blackNumber;
 	
-	public int getGameRecordId() {
+	public Long getGameRecordId() {
 		return gameRecordId;
 	}
 
-	public void setGameRecordId(int gameRecordId) {
+	public void setGameRecordId(Long gameRecordId) {
 		this.gameRecordId = gameRecordId;
 	}
 
-	public int getPlayerAId() {
-		return playerAId;
+	public User getPlayerA() {
+		return playerA;
 	}
 
-	public void setPlayerAId(int playerAId) {
-		this.playerAId = playerAId;
+	public void setPlayerA(User playerA) {
+		this.playerA = playerA;
 	}
 
-	public int getPlayerBId() {
-		return playerBId;
+	public User getPlayerB() {
+		return playerB;
 	}
 
-	public void setPlayerBId(int playerBId) {
-		this.playerBId = playerBId;
+	public void setPlayerB(User playerB) {
+		this.playerB = playerB;
 	}
 
 	public Date getGameBeginTime() {
@@ -69,3 +77,4 @@ public class GameRecord {
 	}
 
 }
+

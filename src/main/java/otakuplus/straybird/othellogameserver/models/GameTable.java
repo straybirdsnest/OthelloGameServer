@@ -1,43 +1,43 @@
 package otakuplus.straybird.othellogameserver.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="OthelloGameTable")
 public class GameTable {
 
-	private long gameTableId;
-	private Long playerAId;
-	private Long playerBId;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long getGameTableId() {
+	private Long gameTableId;
+	@OneToOne
+	@JoinColumn
+	private User playerA;
+	@OneToOne
+	@JoinColumn
+	private User playerB;
+
+	public Long getGameTableId() {
 		return gameTableId;
 	}
 
-	public void setGameTableId(int gameTableId) {
+	public void setGameTableId(Long gameTableId) {
 		this.gameTableId = gameTableId;
 	}
 
-	public Long getPlayerAId() {
-		return playerAId;
+	public User getPlayerA() {
+		return playerA;
 	}
 
-	public void setPlayerAId(Long playerAId) {
-		this.playerAId = playerAId;
+	public void setPlayerA(User playerA) {
+		this.playerA = playerA;
 	}
 
-	public Long getPlayerBId() {
-		return playerBId;
+	public User getPlayerB() {
+		return playerB;
 	}
 
-	public void setPlayerBId(Long playerBId) {
-		this.playerBId = playerBId;
+	public void setPlayerB(User playerB) {
+		this.playerB = playerB;
 	}
 	
 }

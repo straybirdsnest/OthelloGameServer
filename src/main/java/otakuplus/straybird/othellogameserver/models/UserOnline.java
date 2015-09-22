@@ -1,19 +1,29 @@
 package otakuplus.straybird.othellogameserver.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="OthelloUserOnline")
 public class UserOnline {
-	public static int ONLINE = 100;
-	public static int STAND_BY = 101;
-	public static int GAMING = 102;
-	public static int OFFLINE= 199;
-	
-	private int userId;
+	public static final int ONLINE = 100;
+	public static final int STAND_BY = 101;
+	public static final int GAMING = 102;
+	public static final int OFFLINE= 199;
+
+	@Id
+	private Long userId;
 	private int onlineState;
 
-	public int getUserId() {
+	@MapsId
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="userId")
+	private User user;
+
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -25,4 +35,11 @@ public class UserOnline {
 		this.onlineState = onlineState;
 	}
 
+	public User getUser(){
+		return this.user;
+	}
+
+	public void setUser(User user){
+		this.user = user;
+	}
 }
