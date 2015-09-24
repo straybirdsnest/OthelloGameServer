@@ -12,11 +12,14 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import otakuplus.straybird.othellogameserver.models.User;
 
 public class OthelloGameSocketIOServer {
 	public static final int CHAT_SERVER_PORT = 8081;
 
+	private static final Logger logger = LoggerFactory.getLogger(OthelloGameSocketIOServer.class);
 	private SocketIOServer socketIOServer = null;
 
 	public OthelloGameSocketIOServer(Configuration configuration) {
@@ -29,16 +32,7 @@ public class OthelloGameSocketIOServer {
 
 			@Override
 			public void onConnect(SocketIOClient socketIOClient) {
-				
-				User user = new User();
-				user.setUserId(1L);
-				user.setUsername("someuser");
-				user.setPassword("somepassword");
-				user.setEmailAddress("user@example");
-				user.setIsActive(true);
-				user.setCreateTime(new Timestamp(1000000));
-				
-				socketIOClient.sendEvent("connect", user);
+				logger.info("socket.io client connect to server.");
 			}
 
 		});
