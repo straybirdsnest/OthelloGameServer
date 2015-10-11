@@ -21,13 +21,14 @@ public class SecurityUser extends User implements UserDetails{
             this.setIsActive(user.getIsActive());
             this.setUserInformation(user.getUserInformation());
             this.setUserOnline(user.getUserOnline());
+            this.setUserGroup(user.getUserGroup());
         }
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
+        authorities.add(new SimpleGrantedAuthority(getUserGroup().getUserGroupName()));
         return authorities;
     }
 

@@ -3,15 +3,7 @@ package otakuplus.straybird.othellogameserver.models;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -59,6 +51,10 @@ public class User {
     @JsonIgnore
     @OneToMany
     private List<GameRecord> gameRecords;
+
+    @JsonIgnore
+	@ManyToOne
+	private UserGroup userGroup;
 
 	public User() {
 
@@ -130,5 +126,21 @@ public class User {
 
     public void setUserOnline(UserOnline userOnline){
         this.userOnline = userOnline;
+    }
+
+    public List<GameRecord> getGameRecords() {
+        return gameRecords;
+    }
+
+    public void setGameRecords(List<GameRecord> gameRecords) {
+        this.gameRecords = gameRecords;
+    }
+
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
     }
 }
