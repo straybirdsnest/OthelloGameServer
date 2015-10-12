@@ -7,6 +7,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import otakuplus.straybird.othellogameserver.security.CsrfHeaderFilter;
 import otakuplus.straybird.othellogameserver.services.OthelloUserDetailsService;
 
 @Configuration
@@ -27,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http.authorizeRequests()
-                .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/authorization").permitAll()
+                .antMatchers("/api/crsftoken").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/api/**").hasRole("USER").anyRequest().authenticated()
                 .and()
@@ -35,6 +40,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .formLogin().loginProcessingUrl("/api/login").failureUrl("/api/login/failure").permitAll();
         // @formatter:on
+
+        // CSRF tokens handling
+        http.addFilterAfter(new CsrfHeaderFilter (), CsrfFilter.class);
+        http.csrf().csrfTokenRepository(csrfTokenRepository());
+    }
+
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
 }
 

@@ -1,7 +1,5 @@
 package otakuplus.straybird.othellogameserver.network;
 
-import otakuplus.straybird.othellogameserver.network.Login;
-
 public class Login {
 	private String username;
 	private String password;
