@@ -11,6 +11,7 @@ public class UserGroup {
     @GeneratedValue
     private Long userGroupId;
 
+    // GroupName in database must follow the format of "ROLE_XXX"
     @NotNull
     private String userGroupName;
 
