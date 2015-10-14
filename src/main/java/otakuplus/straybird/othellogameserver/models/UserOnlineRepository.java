@@ -4,9 +4,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
-public interface UserRepository extends CrudRepository<User, Long>{
-	
-	public User findByUsername(@Param("username") String username);
-	
+public interface UserOnlineRepository extends CrudRepository<UserOnline, Long> {
+    public List<UserOnline> findByOnlineState(@Param("onlineState") int onlinestate);
 }

@@ -3,12 +3,14 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
+    <meta charset="utf-8">
     <title>Othello Game Server</title>
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
 
     <link rel="stylesheet" type="text/css" href="/css/signin.css" />
+
 </head>
-<body>
+<body ng-app="register">
 
     <div class="container">
 
@@ -28,5 +30,10 @@
       </form>
 
     </div>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script src="http://cdn.bootcss.com/angular.js/1.4.7/angular.js"></script>
+    <script src="/js/controller.js"></script>
 </body>
 </html>

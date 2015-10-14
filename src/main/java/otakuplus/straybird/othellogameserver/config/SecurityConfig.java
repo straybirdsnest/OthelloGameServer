@@ -31,11 +31,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http.authorizeRequests()
+                .antMatchers("/api/csrftoken").permitAll()
                 .antMatchers("/api/authorization").permitAll()
                 .antMatchers("/api/crsftoken").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/api/**").hasRole("USER").anyRequest().authenticated();
         // @formatter:on
+
+        http.formLogin().loginProcessingUrl("/api/login/").permitAll();
 
         // CSRF tokens handling
         http.addFilterAfter(new CsrfHeaderFilter (), CsrfFilter.class);

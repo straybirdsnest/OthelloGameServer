@@ -24,11 +24,6 @@ public class AuthorizationController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/api/authorization", method = RequestMethod.GET)
-    public void firstCrstToken(){
-        // empty function will returning HTTP 200 OK.
-    }
-
     @RequestMapping(value = "/api/authorization", method = RequestMethod.POST)
     public AuthorizationCode userAuthorization(@RequestBody Login login){
         User user = userRepository.findByUsername(login.getUsername());
