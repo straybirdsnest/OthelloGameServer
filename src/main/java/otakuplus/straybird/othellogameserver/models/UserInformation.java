@@ -1,30 +1,19 @@
 package otakuplus.straybird.othellogameserver.models;
 
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
+import java.util.Date;
 
 @Entity
 @Table(name = "OthelloUserInformation")
 public class UserInformation {
 	public static final String GENDER_MALE = "male";
 	public static final String GENDER_FEMALE = "female";
-	
+
 	//@JsonView(UserInformationView.ClientUserInformation.class)
 	@Id
 	private Long userInformationId;
 
-	@JsonIgnore
 	@MapsId
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="userId")

@@ -1,13 +1,11 @@
 package otakuplus.straybird.othellogameserver.models;
 
-import org.springframework.context.annotation.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 public class SecurityUser extends User implements UserDetails{
 
@@ -22,6 +20,7 @@ public class SecurityUser extends User implements UserDetails{
             this.setUserInformation(user.getUserInformation());
             this.setUserOnline(user.getUserOnline());
             this.setUserGroup(user.getUserGroup());
+            this.setSocketIOId(user.getSocketIOId());
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -31,6 +32,7 @@ public class User {
 	private String password;
 
     //@JsonView(UserView.ClientUser.class)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT+8")
 	@CreationTimestamp
 	@NotNull
     private Date createTime;
@@ -38,7 +40,8 @@ public class User {
 	//@JsonView(UserView.ClientUser.class)
 	@NotNull
 	private boolean isActive = false;
-	
+
+    @JsonIgnore
 	@OneToOne(cascade= CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private UserInformation userInformation;
@@ -55,6 +58,9 @@ public class User {
     @JsonIgnore
 	@ManyToOne
 	private UserGroup userGroup;
+
+    @JsonIgnore
+	private String socketIOId;
 
 	public User() {
 
@@ -142,5 +148,13 @@ public class User {
 
     public void setUserGroup(UserGroup userGroup) {
         this.userGroup = userGroup;
+    }
+
+    public String getSocketIOId() {
+        return socketIOId;
+    }
+
+    public void setSocketIOId(String socketIOId) {
+        this.socketIOId = socketIOId;
     }
 }

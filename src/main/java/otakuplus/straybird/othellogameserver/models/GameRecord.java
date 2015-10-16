@@ -1,5 +1,7 @@
 package otakuplus.straybird.othellogameserver.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 
 import java.util.Date;
@@ -15,7 +17,9 @@ public class GameRecord {
 	private User playerA;
 	@OneToOne
     private User playerB;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT+8")
 	private Date gameBeginTime;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT+8")
 	private Date gameEndTIme;
 	private int whiteNumber;
 	private int blackNumber;

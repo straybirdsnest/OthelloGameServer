@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import otakuplus.straybird.othellogameserver.models.SecurityUser;
 import otakuplus.straybird.othellogameserver.models.User;
 import otakuplus.straybird.othellogameserver.models.UserRepository;
-import otakuplus.straybird.othellogameserver.network.AuthorizationCode;
 import otakuplus.straybird.othellogameserver.network.Login;
+import otakuplus.straybird.othellogameserver.network.Logout;
 
 @RestController
 public class AuthorizationController {
@@ -25,18 +25,32 @@ public class AuthorizationController {
     private UserRepository userRepository;
 
     @RequestMapping(value = "/api/authorization", method = RequestMethod.POST)
-    public AuthorizationCode userAuthorization(@RequestBody Login login){
+    public User userAuthorization(@RequestBody Login login){
         User user = userRepository.findByUsername(login.getUsername());
 
-        AuthorizationCode authorizationCode = new AuthorizationCode();
-        if(user != null && user.getPassword().equals(login.getPassword())){
+        if(user != null && user.getPassword().equals(login.getPassword()) && login.getSocketIOId() != null){
             // TODO implements hash code
-            authorizationCode.setAuthorizationCode(""+user.getUserId()+user.getUsername());
             SecurityUser securityUser = new SecurityUser(user);
             Authentication authentication = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            logger.info("Logging in with {}", authentication);
+            logger.info("Login  with {}", authentication);
+            // Save socketIOId
+            user.setSocketIOId(login.getSocketIOId());
+            userRepository.save(user);
         }
-        return authorizationCode;
+        return user;
+    }
+
+    @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
+    public void userLogout(@RequestBody Logout logout){
+        Long userId = logout.getUserId();
+        if(userId != null){
+            User user = userRepository.findOne(userId);
+            if(user != null ){
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                logger.info("Logout with {}", authentication);
+            }
+        }
+
     }
 }

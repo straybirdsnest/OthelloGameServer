@@ -8,5 +8,5 @@ import java.util.List;
 
 @Transactional
 public interface UserOnlineRepository extends CrudRepository<UserOnline, Long> {
-    public List<UserOnline> findByOnlineState(@Param("onlineState") int onlinestate);
+    List<UserOnline> findByOnlineState(@Param("onlineState") int onlinestate);
 }
