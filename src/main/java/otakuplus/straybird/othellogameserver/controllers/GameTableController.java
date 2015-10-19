@@ -20,23 +20,32 @@ public class GameTableController {
     @Autowired
     private GameTableRepository gameTableRepository;
 
-    @RequestMapping(value = "/api/gametable/{id}/enter", method = RequestMethod.POST)
-    public void enterGameTable(@PathVariable Long gameTableId, @RequestBody Long userId)
+    @RequestMapping(value = "/api/gameTables/{gameTableId}/seats/{seatId}/enter", method = RequestMethod.POST)
+    public void enterGameTable(@PathVariable Long gameTableId,@PathVariable Long seatId, @RequestBody Long userId)
     {
         User user = userRepository.findOne(userId);
         GameTable gameTable = gameTableRepository.findOne(gameTableId);
         if(user != null && gameTable != null){
-            if(gameTable.getPlayerA() == null){
+            if(seatId == 0L){
                 gameTable.setPlayerA(user);
-            }else if(gameTable.getPlayerB() == null){
+            }else if(seatId == 1L){
                 gameTable.setPlayerB(user);
             }
             gameTableRepository.save(gameTable);
         }
     }
 
-    @RequestMapping(value = "/api/gametable/{id}/leave", method = RequestMethod.POST)
-    public void leaveGameTable(@PathVariable Long gameTableId, @RequestBody Long userId){
-
+    @RequestMapping(value = "/api/gameTables/{gameTableId}/seats/{seatId}/leave", method = RequestMethod.POST)
+    public void leaveGameTable(@PathVariable Long gameTableId, @PathVariable Long seatId, @RequestBody Long userId){
+        User user = userRepository.findOne(userId);
+        GameTable gameTable = gameTableRepository.findOne(gameTableId);
+        if(user != null && gameTable != null){
+            if(seatId == 0L){
+                gameTable.setPlayerA(null);
+            }else if(seatId == 1L){
+                gameTable.setPlayerB(null);
+            }
+            gameTableRepository.save(gameTable);
+        }
     }
 }

@@ -22,7 +22,7 @@ public class GameHallController {
     @Autowired
     private OthelloGameSocketIOServer othelloGameSocketIOServer;
 
-    @RequestMapping(value = "/api/gamehall/enter", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/gameHall/enter", method = RequestMethod.POST)
     public void enterGameHall(@RequestBody Long userId){
         if(userId != null) {
             User user = userRepository.findOne(userId);
@@ -45,7 +45,7 @@ public class GameHallController {
         }
     }
 
-    @RequestMapping(value = "/api/gamehall/leave", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/gameHall/leave", method = RequestMethod.POST)
     public void leaveGameHall(@RequestBody Long userId)
     {
         User user = userRepository.findOne(userId);
