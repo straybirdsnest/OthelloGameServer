@@ -1,9 +1,11 @@
 package otakuplus.straybird.othellogameserver.network;
 
+import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
+import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ public class OthelloGameSocketIOServer {
 	public static final int CHAT_SERVER_PORT = 8081;
 
     public static final String GAME_HALL_ROOM = "gamehall";
+    public static final String SEND_MESSAGE_EVENT = "sendMessage";
 
 	private static final Logger logger = LoggerFactory.getLogger(OthelloGameSocketIOServer.class);
 	private SocketIOServer socketIOServer = null;
@@ -49,6 +52,13 @@ public class OthelloGameSocketIOServer {
 			}
 		});
 
+        socketIOServer.addEventListener(SEND_MESSAGE_EVENT, SendMessage.class, new DataListener<SendMessage>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, SendMessage sendMessage, AckRequest ackRequest) throws Exception {
+                socketIOServer.getRoomOperations(GAME_HALL_ROOM).sendEvent(SEND_MESSAGE_EVENT, sendMessage);
+            }
+        });
+
 	}
 
 	public void startServer() {
@@ -67,14 +77,29 @@ public class OthelloGameSocketIOServer {
 		return socketIOServer;
 	}
 
-    public void joinClientToRoom(String clientId, String room){
-        if(socketIOServer != null && room != null){
+    public void joinClientToRoom(String clientId, String roomName){
+        if(socketIOServer != null && roomName != null){
             UUID uuid = UUID.fromString(clientId);
             SocketIOClient client = socketIOServer.getClient(uuid);
             if(client != null){
-                client.joinRoom(room);
+                client.joinRoom(roomName);
             }
         }
     }
 
+	public void leaveClientFromRoom(String clientId, String roomName){
+        if(socketIOServer != null && roomName != null){
+            UUID uuid = UUID.fromString(clientId);
+            SocketIOClient client = socketIOServer.getClient(uuid);
+            if(client != null){
+                client.leaveRoom(roomName);
+            }
+        }
+    }
+
+    public void sendMessage(SendMessage sendMessage){
+        if(socketIOServer != null && sendMessage.getRoomName() != null){
+            socketIOServer.getRoomOperations(sendMessage.getRoomName()).sendEvent(SEND_MESSAGE_EVENT, sendMessage);
+        }
+    }
 }

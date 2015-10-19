@@ -1,11 +1,10 @@
 package otakuplus.straybird.othellogameserver.network;
 
-import java.util.Date;
-
 public class SendMessage {
 	private String nickname;
 	private String message;
-	private Date messageTime;
+	private String sendTime;
+	private String roomName;
 
 	public String getNickname() {
 		return nickname;
@@ -23,12 +22,19 @@ public class SendMessage {
 		this.message = message;
 	}
 
-	public Date getMessageTime() {
-		return messageTime;
+	public String getSendTime() {
+		return sendTime;
 	}
 
-	public void setMessageTime(Date messageTime) {
-		this.messageTime = messageTime;
+	public void setSendTime(String sendTime) {
+		this.sendTime = sendTime;
 	}
 
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
 }
