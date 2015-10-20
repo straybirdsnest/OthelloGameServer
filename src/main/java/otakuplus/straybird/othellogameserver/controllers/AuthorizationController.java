@@ -3,6 +3,8 @@ package otakuplus.straybird.othellogameserver.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +27,7 @@ public class AuthorizationController {
     private UserRepository userRepository;
 
     @RequestMapping(value = "/api/authorization", method = RequestMethod.POST)
-    public User userAuthorization(@RequestBody Login login){
+    public ResponseEntity<?> userAuthorization(@RequestBody Login login){
         User user = userRepository.findByUsername(login.getUsername());
 
         if(user != null && user.getPassword().equals(login.getPassword()) && login.getSocketIOId() != null){
@@ -37,8 +39,11 @@ public class AuthorizationController {
             // Save socketIOId
             user.setSocketIOId(login.getSocketIOId());
             userRepository.save(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
-        return user;
+        logger.info("Login fail with "+login.getUsername());
+        String error = "login fail.";
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
