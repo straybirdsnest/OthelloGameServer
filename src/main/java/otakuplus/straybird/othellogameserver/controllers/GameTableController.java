@@ -2,11 +2,12 @@ package otakuplus.straybird.othellogameserver.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import otakuplus.straybird.othellogameserver.models.GameTable;
-import otakuplus.straybird.othellogameserver.models.GameTableRepository;
-import otakuplus.straybird.othellogameserver.models.User;
-import otakuplus.straybird.othellogameserver.models.UserRepository;
+import otakuplus.straybird.othellogameserver.models.*;
 import otakuplus.straybird.othellogameserver.network.OthelloGameSocketIOServer;
+import otakuplus.straybird.othellogameserver.network.SendMessage;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @RestController
 public class GameTableController {
@@ -24,6 +25,7 @@ public class GameTableController {
     public void enterGameTable(@PathVariable Long gameTableId,@PathVariable Long seatId, @RequestBody Long userId)
     {
         User user = userRepository.findOne(userId);
+        UserInformation userInformation = user.getUserInformation();
         GameTable gameTable = gameTableRepository.findOne(gameTableId);
         if(user != null && gameTable != null){
             if(seatId == 0L){
@@ -31,13 +33,25 @@ public class GameTableController {
             }else if(seatId == 1L){
                 gameTable.setPlayerB(user);
             }
-            gameTableRepository.save(gameTable);
+            String socketIOId = user.getSocketIOId();
+            gameTableRepository.save(gameTable);if(socketIOId != null){
+                othelloGameSocketIOServer.joinClientToRoom(user.getSocketIOId(),
+                        OthelloGameSocketIOServer.GAME_TABLE_ROOM + gameTableId);
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setNickname("[Othello Server]");
+                sendMessage.setMessage(userInformation.getNickname()+"进入游戏房间");
+                sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
+                sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
+                othelloGameSocketIOServer.sendMessage(sendMessage);
+            }
+            System.out.println("room name"+OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
         }
     }
 
     @RequestMapping(value = "/api/gameTables/{gameTableId}/seats/{seatId}/leave", method = RequestMethod.POST)
     public void leaveGameTable(@PathVariable Long gameTableId, @PathVariable Long seatId, @RequestBody Long userId){
         User user = userRepository.findOne(userId);
+        UserInformation userInformation = user.getUserInformation();
         GameTable gameTable = gameTableRepository.findOne(gameTableId);
         if(user != null && gameTable != null){
             if(seatId == 0L){
@@ -46,6 +60,17 @@ public class GameTableController {
                 gameTable.setPlayerB(null);
             }
             gameTableRepository.save(gameTable);
+            String socketIOId = user.getSocketIOId();
+            gameTableRepository.save(gameTable);if(socketIOId != null){
+                othelloGameSocketIOServer.leaveClientFromRoom(user.getSocketIOId(),
+                        OthelloGameSocketIOServer.GAME_TABLE_ROOM + gameTableId);
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setNickname("[Othello Server]");
+                sendMessage.setMessage(userInformation.getNickname()+"离开游戏房间");
+                sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
+                sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
+                othelloGameSocketIOServer.sendMessage(sendMessage);
+            }
         }
     }
 }

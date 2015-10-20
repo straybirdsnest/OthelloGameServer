@@ -19,6 +19,7 @@ public class OthelloGameSocketIOServer {
 	public static final int CHAT_SERVER_PORT = 8081;
 
     public static final String GAME_HALL_ROOM = "gamehall";
+    public static final String GAME_TABLE_ROOM = "gametable";
     public static final String SEND_MESSAGE_EVENT = "sendMessage";
 
 	private static final Logger logger = LoggerFactory.getLogger(OthelloGameSocketIOServer.class);
@@ -55,7 +56,7 @@ public class OthelloGameSocketIOServer {
         socketIOServer.addEventListener(SEND_MESSAGE_EVENT, SendMessage.class, new DataListener<SendMessage>() {
             @Override
             public void onData(SocketIOClient socketIOClient, SendMessage sendMessage, AckRequest ackRequest) throws Exception {
-                socketIOServer.getRoomOperations(GAME_HALL_ROOM).sendEvent(SEND_MESSAGE_EVENT, sendMessage);
+                socketIOServer.getRoomOperations(sendMessage.getRoomName()).sendEvent(SEND_MESSAGE_EVENT, sendMessage);
             }
         });
 
