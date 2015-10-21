@@ -1,11 +1,16 @@
 package otakuplus.straybird.othellogameserver.network;
 
 public class GameOperation {
+    public static final String STAND_BY = "standBy";
+    public static final String STAND_BY_CANCLE= "standByCancle";
+    public static final String BLACK_SET = "blackSet";
+    public static final String WHITE_SET = "whiteSet";
+
     private String roomName;
     private Long seatId;
     private Long setX;
     private Long setY;
-    private Boolean standBy;
+    private String operation;
 
     public String getRoomName() {
         return roomName;
@@ -39,11 +44,11 @@ public class GameOperation {
         this.setY = setY;
     }
 
-    public Boolean getStandBy() {
-        return standBy;
+    public String getOperation() {
+        return operation;
     }
 
-    public void setStandBy(Boolean standBy) {
-        this.standBy = standBy;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 }

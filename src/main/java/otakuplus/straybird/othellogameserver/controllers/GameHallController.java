@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import otakuplus.straybird.othellogameserver.models.*;
+import otakuplus.straybird.othellogameserver.network.NotifyUpdateUserInformations;
 import otakuplus.straybird.othellogameserver.network.OthelloGameSocketIOServer;
 import otakuplus.straybird.othellogameserver.network.SendMessage;
 
@@ -40,6 +41,9 @@ public class GameHallController {
                     sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
                     sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
                     othelloGameSocketIOServer.sendMessage(sendMessage);
+                    NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();
+                    notifyUpdateUserInformations.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
+                    othelloGameSocketIOServer.notifyUpdateUserInformationList(notifyUpdateUserInformations);
                 }
             }
         }
@@ -62,6 +66,9 @@ public class GameHallController {
                 sendMessage.setMessage(userInformation.getNickname()+"离开游戏大厅");
                 sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
                 sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
+                NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();
+                notifyUpdateUserInformations.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
+                othelloGameSocketIOServer.notifyUpdateUserInformationList(notifyUpdateUserInformations);
             }
         }
     }

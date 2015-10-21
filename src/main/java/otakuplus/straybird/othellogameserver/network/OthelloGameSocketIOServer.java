@@ -22,6 +22,7 @@ public class OthelloGameSocketIOServer {
     public static final String GAME_TABLE_ROOM = "gametable";
     public static final String SEND_MESSAGE_EVENT = "sendMessage";
     public static final String GAME_OPERATION_EVENT = "gameOperation";
+    public static final String NOTIFY_USER_INFORMATIONS_UPDATE = "notifyUserInformationsUpdate";
 
 	private static final Logger logger = LoggerFactory.getLogger(OthelloGameSocketIOServer.class);
 	private SocketIOServer socketIOServer = null;
@@ -111,6 +112,13 @@ public class OthelloGameSocketIOServer {
     public void sendMessage(SendMessage sendMessage){
         if(socketIOServer != null && sendMessage.getRoomName() != null){
             socketIOServer.getRoomOperations(sendMessage.getRoomName()).sendEvent(SEND_MESSAGE_EVENT, sendMessage);
+        }
+    }
+
+    public void notifyUpdateUserInformationList(NotifyUpdateUserInformations notifyUpdateUserInformations){
+        if(socketIOServer != null && notifyUpdateUserInformations != null){
+            socketIOServer.getRoomOperations(notifyUpdateUserInformations.getRoomName())
+                    .sendEvent(NOTIFY_USER_INFORMATIONS_UPDATE, notifyUpdateUserInformations);
         }
     }
 }
