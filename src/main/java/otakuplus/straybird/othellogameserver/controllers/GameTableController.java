@@ -29,9 +29,13 @@ public class GameTableController {
         UserInformation userInformation = user.getUserInformation();
         GameTable gameTable = gameTableRepository.findOne(gameTableId);
         if(user != null && gameTable != null){
-            if(seatId == 0L){
+            if(seatId == 0L &&
+                    (gameTable.getPlayerA() == null ||
+                            (gameTable.getPlayerA() != null && gameTable.getPlayerA().getUserId() != userId))){
                 gameTable.setPlayerA(user);
-            }else if(seatId == 1L){
+            }else if(seatId == 1L &&
+                    (gameTable.getPlayerB() == null ||
+                            (gameTable.getPlayerB() != null && gameTable.getPlayerB().getUserId() != userId) )){
                 gameTable.setPlayerB(user);
             }
             String socketIOId = user.getSocketIOId();
