@@ -3,6 +3,7 @@ package otakuplus.straybird.othellogameserver.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import otakuplus.straybird.othellogameserver.models.*;
+import otakuplus.straybird.othellogameserver.network.NotifyUpdateGameTables;
 import otakuplus.straybird.othellogameserver.network.OthelloGameSocketIOServer;
 import otakuplus.straybird.othellogameserver.network.SendMessage;
 
@@ -43,6 +44,9 @@ public class GameTableController {
                 sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
                 sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
                 othelloGameSocketIOServer.sendMessage(sendMessage);
+                NotifyUpdateGameTables notifyUpdateGameTables = new NotifyUpdateGameTables();
+                notifyUpdateGameTables.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
+                othelloGameSocketIOServer.notifyUpdateGameTableList(notifyUpdateGameTables);
             }
             System.out.println("room name"+OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
         }
@@ -70,6 +74,9 @@ public class GameTableController {
                 sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
                 sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
                 othelloGameSocketIOServer.sendMessage(sendMessage);
+                NotifyUpdateGameTables notifyUpdateGameTables = new NotifyUpdateGameTables();
+                notifyUpdateGameTables.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
+                othelloGameSocketIOServer.notifyUpdateGameTableList(notifyUpdateGameTables);
             }
         }
     }
