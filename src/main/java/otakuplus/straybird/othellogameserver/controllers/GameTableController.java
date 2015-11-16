@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import otakuplus.straybird.othellogameserver.models.*;
 import otakuplus.straybird.othellogameserver.network.NotifyUpdateGameTables;
-import otakuplus.straybird.othellogameserver.network.OthelloGameSocketIOServer;
 import otakuplus.straybird.othellogameserver.network.SendMessage;
+import otakuplus.straybird.othellogameserver.services.SocketIOService;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 public class GameTableController {
 
     @Autowired
-    private OthelloGameSocketIOServer othelloGameSocketIOServer;
+    private SocketIOService socketIOService;
 
     @Autowired
     private UserRepository userRepository;
@@ -40,19 +40,19 @@ public class GameTableController {
             }
             String socketIOId = user.getSocketIOId();
             gameTableRepository.save(gameTable);if(socketIOId != null){
-                othelloGameSocketIOServer.joinClientToRoom(user.getSocketIOId(),
-                        OthelloGameSocketIOServer.GAME_TABLE_ROOM + gameTableId);
+                socketIOService.joinClientToRoom(user.getSocketIOId(),
+                        SocketIOService.GAME_TABLE_ROOM + gameTableId);
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setNickname("[Othello Server]");
                 sendMessage.setMessage(userInformation.getNickname()+"进入游戏房间");
                 sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
-                sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
-                othelloGameSocketIOServer.sendMessage(sendMessage);
+                sendMessage.setRoomName(SocketIOService.GAME_TABLE_ROOM+gameTableId);
+                socketIOService.sendMessage(sendMessage);
                 NotifyUpdateGameTables notifyUpdateGameTables = new NotifyUpdateGameTables();
-                notifyUpdateGameTables.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
-                othelloGameSocketIOServer.notifyUpdateGameTableList(notifyUpdateGameTables);
+                notifyUpdateGameTables.setRoomName(SocketIOService.GAME_HALL_ROOM);
+                socketIOService.notifyUpdateGameTableList(notifyUpdateGameTables);
             }
-            System.out.println("room name"+OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
+            System.out.println("room name"+SocketIOService.GAME_TABLE_ROOM+gameTableId);
         }
     }
 
@@ -70,17 +70,17 @@ public class GameTableController {
             gameTableRepository.save(gameTable);
             String socketIOId = user.getSocketIOId();
             gameTableRepository.save(gameTable);if(socketIOId != null){
-                othelloGameSocketIOServer.leaveClientFromRoom(user.getSocketIOId(),
-                        OthelloGameSocketIOServer.GAME_TABLE_ROOM + gameTableId);
+                socketIOService.leaveClientFromRoom(user.getSocketIOId(),
+                        SocketIOService.GAME_TABLE_ROOM + gameTableId);
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setNickname("[Othello Server]");
                 sendMessage.setMessage(userInformation.getNickname()+"离开游戏房间");
                 sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
-                sendMessage.setRoomName(OthelloGameSocketIOServer.GAME_TABLE_ROOM+gameTableId);
-                othelloGameSocketIOServer.sendMessage(sendMessage);
+                sendMessage.setRoomName(SocketIOService.GAME_TABLE_ROOM+gameTableId);
+                socketIOService.sendMessage(sendMessage);
                 NotifyUpdateGameTables notifyUpdateGameTables = new NotifyUpdateGameTables();
-                notifyUpdateGameTables.setRoomName(OthelloGameSocketIOServer.GAME_HALL_ROOM);
-                othelloGameSocketIOServer.notifyUpdateGameTableList(notifyUpdateGameTables);
+                notifyUpdateGameTables.setRoomName(SocketIOService.GAME_HALL_ROOM);
+                socketIOService.notifyUpdateGameTableList(notifyUpdateGameTables);
             }
         }
     }

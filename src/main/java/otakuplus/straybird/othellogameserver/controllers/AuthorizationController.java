@@ -42,8 +42,7 @@ public class AuthorizationController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         logger.info("Login fail with "+login.getUsername());
-        String error = "login fail.";
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
