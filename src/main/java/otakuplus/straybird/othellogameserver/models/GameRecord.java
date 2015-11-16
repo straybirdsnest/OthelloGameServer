@@ -3,7 +3,6 @@ package otakuplus.straybird.othellogameserver.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-
 import java.util.Date;
 
 @Entity
@@ -12,73 +11,75 @@ public class GameRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long gameRecordId;
-    @OneToOne
-	private User playerA;
-	@OneToOne
+    private Integer gameRecordId;
+    @ManyToOne
+    @JoinColumn(name = "playera")
+    private User playerA;
+    @ManyToOne
+    @JoinColumn(name = "playerb")
     private User playerB;
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT+8")
-	private Date gameBeginTime;
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT+8")
-	private Date gameEndTIme;
-	private int whiteNumber;
-	private int blackNumber;
-	
-	public Long getGameRecordId() {
-		return gameRecordId;
-	}
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd,HH:00", timezone = "GMT+8")
+    private Date gameBeginTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd,HH:00", timezone = "GMT+8")
+    private Date gameEndTime;
+    private int whiteNumber;
+    private int blackNumber;
 
-	public void setGameRecordId(Long gameRecordId) {
-		this.gameRecordId = gameRecordId;
-	}
+    public Integer getGameRecordId() {
+        return gameRecordId;
+    }
 
-	public User getPlayerA() {
-		return playerA;
-	}
+    public void setGameRecordId(Integer gameRecordId) {
+        this.gameRecordId = gameRecordId;
+    }
 
-	public void setPlayerA(User playerA) {
-		this.playerA = playerA;
-	}
+    public User getPlayerA() {
+        return playerA;
+    }
 
-	public User getPlayerB() {
-		return playerB;
-	}
+    public void setPlayerA(User playerA) {
+        this.playerA = playerA;
+    }
 
-	public void setPlayerB(User playerB) {
-		this.playerB = playerB;
-	}
+    public User getPlayerB() {
+        return playerB;
+    }
 
-	public Date getGameBeginTime() {
-		return gameBeginTime;
-	}
+    public void setPlayerB(User playerB) {
+        this.playerB = playerB;
+    }
 
-	public void setGameBeginTime(Date gameBeginTime) {
-		this.gameBeginTime = gameBeginTime;
-	}
+    public Date getGameBeginTime() {
+        return gameBeginTime;
+    }
 
-	public Date getGameEndTIme() {
-		return gameEndTIme;
-	}
+    public void setGameBeginTime(Date gameBeginTime) {
+        this.gameBeginTime = gameBeginTime;
+    }
 
-	public void setGameEndTIme(Date gameEndTIme) {
-		this.gameEndTIme = gameEndTIme;
-	}
+    public Date getGameEndTime() {
+        return gameEndTime;
+    }
 
-	public int getWhiteNumber() {
-		return whiteNumber;
-	}
+    public void setGameEndTime(Date gameEndTime) {
+        this.gameEndTime = gameEndTime;
+    }
 
-	public void setWhiteNumber(int whiteNumber) {
-		this.whiteNumber = whiteNumber;
-	}
+    public int getWhiteNumber() {
+        return whiteNumber;
+    }
 
-	public int getBlackNumber() {
-		return blackNumber;
-	}
+    public void setWhiteNumber(int whiteNumber) {
+        this.whiteNumber = whiteNumber;
+    }
 
-	public void setBlackNumber(int blackNumber) {
-		this.blackNumber = blackNumber;
-	}
+    public int getBlackNumber() {
+        return blackNumber;
+    }
+
+    public void setBlackNumber(int blackNumber) {
+        this.blackNumber = blackNumber;
+    }
 
 }
 

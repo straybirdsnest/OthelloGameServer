@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
@@ -49,10 +48,10 @@ public class DevHelper {
             if (passwordEnv != null) {
                 password = passwordEnv;
             }
-            if(urlEnv != null){
+            if (urlEnv != null) {
                 url = urlEnv;
             }
-            if(driverEnv != null){
+            if (driverEnv != null) {
                 driver = driverEnv;
             }
 
@@ -90,6 +89,7 @@ public class DevHelper {
             )));
 
             //检查系统是否windows，若是则去掉盘符前面的反斜杠
+/*
             boolean isWindows;
             isWindows = System.getProperty("os.name").startsWith("Windows");
 
@@ -158,11 +158,9 @@ public class DevHelper {
                 String sql4 = "UPDATE T_ACTIVITY SET cover_image_id=2, game_id="+(id%6+1)+" WHERE id="+id;
                 stat.execute(sql4);
             }
-
             stat.close();
+*/
             conn.close();
-
-            System.out.println("已经插入王尼玛的头像和背景");
 
             System.out.println("=== 测试数据库初始化完毕 ===\n");
 

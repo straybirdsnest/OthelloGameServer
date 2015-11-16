@@ -2,31 +2,32 @@ package otakuplus.straybird.othellogameserver.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "OthelloUserGroup")
 public class UserGroup {
     @Id
     @GeneratedValue
-    private Long userGroupId;
+    private Integer userGroupId;
 
     // GroupName in database must follow the format of "ROLE_XXX"
     @NotNull
     private String userGroupName;
 
-    @OneToMany
-    private List<User> userGroupMembers;
+    @OneToMany(mappedBy = "userGroup")
+    private Set<User> userGroupMembers = new HashSet<>();
 
-    public UserGroup(){
+    public UserGroup() {
 
     }
 
-    public Long getUserGroupId() {
+    public Integer getUserGroupId() {
         return userGroupId;
     }
 
-    public void setUserGroupId(Long userGroupId) {
+    public void setUserGroupId(Integer userGroupId) {
         this.userGroupId = userGroupId;
     }
 

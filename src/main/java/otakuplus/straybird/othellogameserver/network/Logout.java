@@ -1,14 +1,14 @@
 package otakuplus.straybird.othellogameserver.network;
 
 public class Logout {
-	private Long userId;
+    private Integer userId;
 
-	public Long getUserId() {
-		return userId;
-	}
+    public Integer getUserId() {
+        return userId;
+    }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
 }

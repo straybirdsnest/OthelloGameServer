@@ -1,143 +1,146 @@
 package otakuplus.straybird.othellogameserver.models;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "OthelloUser")
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer userId;
 
-	@NotNull
-	private String username;
+    @NotNull
+    private String username;
 
-	@NotNull
-	private String emailAddress;
+    @NotNull
+    private String emailAddress;
 
     @JsonIgnore
-	@NotNull
-	private String password;
+    @NotNull
+    private String password;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT+8")
-	@CreationTimestamp
-	@NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd,HH:00", timezone = "GMT+8")
+    @CreationTimestamp
+    @NotNull
     private Date createTime;
-	
-	//@JsonView(UserView.ClientUser.class)
-	@NotNull
-	private boolean isActive = false;
+
+    @NotNull
+    private boolean isActive = true;
 
     @JsonIgnore
-	@OneToOne(cascade= CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	private UserInformation userInformation;
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserInformation userInformation;
 
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private UserOnline userOnline;
+    @JsonIgnore
+    @OneToMany(mappedBy = "playerA")
+    private Set<GameRecord> gameRecords = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany
-    private List<GameRecord> gameRecords;
+    @ManyToOne
+    @JoinTable(name = "OTHELLO_MEMBERSHIP",
+            joinColumns = {@JoinColumn(name = "othello_user_group")},
+            inverseJoinColumns = {@JoinColumn(name = "user_group_members")}
+    )
+    private UserGroup userGroup;
 
     @JsonIgnore
-	@ManyToOne
-	private UserGroup userGroup;
+    private String socketIOId;
 
-    @JsonIgnore
-	private String socketIOId;
+    public User() {
 
-	public User() {
+    }
 
-	}
+    public User(Integer userId) {
+        this.userId = userId;
+    }
 
-	public User(Integer userId) {
-		this.userId = userId;
-	}
+    public Integer getUserId() {
+        return userId;
+    }
 
-	public Integer getUserId() {
-		return userId;
-	}
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setUsername(String username){
-		this.username = username;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 
-	public String getEmailAddress() {
-		return emailAddress;
-	}
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public boolean getIsActive() {
+        return isActive;
+    }
 
-	public boolean getIsActive() {
-		return isActive;
-	}
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
 
-	public void setIsActive(boolean isActive) {
-		this.isActive = isActive;
-	}
+    public UserInformation getUserInformation() {
+        return userInformation;
+    }
 
-	public UserInformation getUserInformation() {
-		return userInformation;
-	}
+    public void setUserInformation(UserInformation userInformation) {
+        this.userInformation = userInformation;
+    }
 
-	public void setUserInformation(UserInformation userInformation) {
-		this.userInformation = userInformation;
-	}
-
-    public UserOnline getUserOnline(){
+    public UserOnline getUserOnline() {
         return this.userOnline;
     }
 
-    public void setUserOnline(UserOnline userOnline){
+    public void setUserOnline(UserOnline userOnline) {
         this.userOnline = userOnline;
     }
 
-    public List<GameRecord> getGameRecords() {
-        return gameRecords;
-    }
+    /*
+        public Set<GameRecord> getGameRecords() {
+            return gameRecords;
+        }
 
-    public void setGameRecords(List<GameRecord> gameRecords) {
-        this.gameRecords = gameRecords;
-    }
-
+        public void setGameRecords(Set<GameRecord> gameRecords) {
+            this.gameRecords = gameRecords;
+        }
+    */
     public UserGroup getUserGroup() {
         return userGroup;
     }

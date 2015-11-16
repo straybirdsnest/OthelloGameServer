@@ -1,7 +1,8 @@
-package otakuplus.straybird.othellogameserver.config.json;
+package otakuplus.straybird.othellogameserver.config;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import otakuplus.straybird.othellogameserver.config.json.UserMixin;
 import otakuplus.straybird.othellogameserver.models.User;
 
 public class OthelloGameServerDataJacksonModule extends SimpleModule {
@@ -11,7 +12,7 @@ public class OthelloGameServerDataJacksonModule extends SimpleModule {
     public static final int PATCH_VERSION = 1;
 
     public OthelloGameServerDataJacksonModule() {
-        super("BlackServerData", new Version(MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, null, null, null));
+        super("OthelloGameServerData", new Version(MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, null, null, null));
     }
 
     @Override

@@ -7,110 +7,108 @@ import java.util.Date;
 @Entity
 @Table(name = "OthelloUserInformation")
 public class UserInformation {
-	public static final String GENDER_MALE = "male";
-	public static final String GENDER_FEMALE = "female";
+    @MapsId
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId")
+    public User user;
+    @Id
+    private Integer userInformationId;
+    //@JsonView(UserInformationView.ClientUserInformation.class)
+    private String nickname;
 
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	@Id
-	private Long userInformationId;
+    @Column(columnDefinition = "ENUM('MALE', 'FEMALE', 'SECRET')")
+    @NotNull
+    private Gender gender;
 
-	@MapsId
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="userId")
-	public User user;
-	
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	private String nickname;
-	
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	@NotNull
-	private String gender;
-	
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	private Date birthday;
-	
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	private int gameWins = 0;
-	
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	private int gameDraws = 0;
-	
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	private int gameLosts = 0;
-	
-	//@JsonView(UserInformationView.ClientUserInformation.class)
-	private int rankPoints = 0;
+    //@JsonView(UserInformationView.ClientUserInformation.class)
+    private Date birthday;
 
-	public User getUser() {
-		return user;
-	}
+    //@JsonView(UserInformationView.ClientUserInformation.class)
+    private int gameWins = 0;
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    //@JsonView(UserInformationView.ClientUserInformation.class)
+    private int gameDraws = 0;
 
-	public Long getUserInformationId() {
-		return userInformationId;
-	}
+    //@JsonView(UserInformationView.ClientUserInformation.class)
+    private int gameLosts = 0;
 
-	public void setUserInformationId(Long userInformationId) {
-		this.userInformationId = userInformationId;
-	}
+    //@JsonView(UserInformationView.ClientUserInformation.class)
+    private int rankPoints = 0;
 
-	public Date getBirthday() {
-		return birthday;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public String getGender() {
-		return gender;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    public Integer getUserInformationId() {
+        return userInformationId;
+    }
 
-	public String getNickname() {
-		return nickname;
-	}
+    public void setUserInformationId(Integer userInformationId) {
+        this.userInformationId = userInformationId;
+    }
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+    public Date getBirthday() {
+        return birthday;
+    }
 
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
-	public int getGameWins() {
-		return gameWins;
-	}
+    public Gender getGender() {
+        return gender;
+    }
 
-	public void setGameWins(int gameWins) {
-		this.gameWins = gameWins;
-	}
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
 
-	public int getGameDraws() {
-		return gameDraws;
-	}
+    public String getNickname() {
+        return nickname;
+    }
 
-	public void setGameDraws(int gameDraws) {
-		this.gameDraws = gameDraws;
-	}
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
-	public int getGameLosts() {
-		return gameLosts;
-	}
+    public int getGameWins() {
+        return gameWins;
+    }
 
-	public void setGameLosts(int gameLosts) {
-		this.gameLosts = gameLosts;
-	}
+    public void setGameWins(int gameWins) {
+        this.gameWins = gameWins;
+    }
 
-	public int getRankPoints() {
-		return rankPoints;
-	}
+    public int getGameDraws() {
+        return gameDraws;
+    }
 
-	public void setRankPoints(int rankPoints) {
-		this.rankPoints = rankPoints;
-	}
+    public void setGameDraws(int gameDraws) {
+        this.gameDraws = gameDraws;
+    }
+
+    public int getGameLosts() {
+        return gameLosts;
+    }
+
+    public void setGameLosts(int gameLosts) {
+        this.gameLosts = gameLosts;
+    }
+
+    public int getRankPoints() {
+        return rankPoints;
+    }
+
+    public void setRankPoints(int rankPoints) {
+        this.rankPoints = rankPoints;
+    }
+
+    public enum Gender {
+        MALE, FEMALE, SECRET
+    }
 
 }

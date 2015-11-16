@@ -15,10 +15,10 @@ import otakuplus.straybird.othellogameserver.services.OthelloUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private OthelloUserDetailsService othelloUserDetailsService;
+    OthelloUserDetailsService othelloUserDetailsService;
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(othelloUserDetailsService);
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.formLogin().loginProcessingUrl("/api/login/").permitAll();
 
         // CSRF tokens handling
-        http.addFilterAfter(new CsrfHeaderFilter (), CsrfFilter.class);
+        http.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
         http.csrf().csrfTokenRepository(csrfTokenRepository());
     }
 

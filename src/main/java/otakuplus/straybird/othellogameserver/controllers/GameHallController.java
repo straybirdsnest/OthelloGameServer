@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import otakuplus.straybird.othellogameserver.daos.UserOnlineRepository;
 import otakuplus.straybird.othellogameserver.daos.UserRepository;
-import otakuplus.straybird.othellogameserver.models.*;
+import otakuplus.straybird.othellogameserver.models.User;
+import otakuplus.straybird.othellogameserver.models.UserInformation;
+import otakuplus.straybird.othellogameserver.models.UserOnline;
 import otakuplus.straybird.othellogameserver.network.NotifyUpdateUserInformations;
 import otakuplus.straybird.othellogameserver.network.SendMessage;
 import otakuplus.straybird.othellogameserver.services.SocketIOService;
@@ -19,15 +21,15 @@ import java.time.ZonedDateTime;
 public class GameHallController {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private UserOnlineRepository userOnlineRepository;
+    UserOnlineRepository userOnlineRepository;
     @Autowired
-    private SocketIOService socketIOService;
+    SocketIOService socketIOService;
 
     @RequestMapping(value = "/api/gameHall/enter", method = RequestMethod.POST)
-    public void enterGameHall(@RequestBody Long userId){
-        if(userId != null) {
+    public void enterGameHall(@RequestBody Integer userId) {
+        if (userId != null) {
             User user = userRepository.findOne(userId);
             UserOnline userOnline = user.getUserOnline();
             UserInformation userInformation = user.getUserInformation();
@@ -35,11 +37,11 @@ public class GameHallController {
                 userOnline.setOnlineState(UserOnline.ONLINE);
                 userOnlineRepository.save(userOnline);
                 String socketIOId = user.getSocketIOId();
-                if(socketIOId != null){
+                if (socketIOId != null) {
                     socketIOService.joinClientToRoom(socketIOId, SocketIOService.GAME_HALL_ROOM);
                     SendMessage sendMessage = new SendMessage();
                     sendMessage.setNickname("[Othello Server]");
-                    sendMessage.setMessage(userInformation.getNickname()+"进入游戏大厅");
+                    sendMessage.setMessage(userInformation.getNickname() + "进入游戏大厅");
                     sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
                     sendMessage.setRoomName(socketIOService.GAME_HALL_ROOM);
                     socketIOService.sendMessage(sendMessage);
@@ -52,20 +54,19 @@ public class GameHallController {
     }
 
     @RequestMapping(value = "/api/gameHall/leave", method = RequestMethod.POST)
-    public void leaveGameHall(@RequestBody Long userId)
-    {
+    public void leaveGameHall(@RequestBody Integer userId) {
         User user = userRepository.findOne(userId);
         UserOnline userOnline = user.getUserOnline();
         UserInformation userInformation = user.getUserInformation();
-        if(user != null && userOnline != null){
+        if (user != null && userOnline != null) {
             userOnline.setOnlineState(UserOnline.OFFLINE);
             userOnlineRepository.save(userOnline);
             String socketIOId = user.getSocketIOId();
-            if(socketIOId != null){
+            if (socketIOId != null) {
                 socketIOService.leaveClientFromRoom(socketIOId, socketIOService.GAME_HALL_ROOM);
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setNickname("[Othello Server]");
-                sendMessage.setMessage(userInformation.getNickname()+"离开游戏大厅");
+                sendMessage.setMessage(userInformation.getNickname() + "离开游戏大厅");
                 sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
                 sendMessage.setRoomName(socketIOService.GAME_HALL_ROOM);
                 NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();

@@ -5,21 +5,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import otakuplus.straybird.othellogameserver.daos.UserRepository;
 import otakuplus.straybird.othellogameserver.models.SecurityUser;
 import otakuplus.straybird.othellogameserver.models.User;
-import otakuplus.straybird.othellogameserver.daos.UserRepository;
 
 @Service
-public class OthelloUserDetailsService implements UserDetailsService{
+public class OthelloUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if(user == null){
-            throw new UsernameNotFoundException("UserName "+username+" not found.");
+        User user = userRepository.findOneByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("UserName " + username + " not found.");
         }
         return new SecurityUser(user);
     }

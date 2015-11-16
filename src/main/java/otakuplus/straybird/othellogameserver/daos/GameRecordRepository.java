@@ -1,12 +1,11 @@
 package otakuplus.straybird.othellogameserver.daos;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import otakuplus.straybird.othellogameserver.models.GameRecord;
 
-/**
- * Created by otakuplus on 2015/9/22.
- */
+@Repository
 @Transactional
-public interface GameRecordRepository extends CrudRepository<GameRecord, Long> {
+public interface GameRecordRepository extends PagingAndSortingRepository<GameRecord, Integer> {
 }

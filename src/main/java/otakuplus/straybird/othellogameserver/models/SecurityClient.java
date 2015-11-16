@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class SecurityClient implements ClientDetails{
+public class SecurityClient implements ClientDetails {
     @Override
     public String getClientId() {
         return null;

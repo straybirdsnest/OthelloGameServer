@@ -16,31 +16,31 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import otakuplus.straybird.othellogameserver.dev.DevHelper;
 
 @SpringBootApplication
-@Component
-public class OthelloGameApp implements ApplicationListener<ApplicationEvent>, ApplicationContextAware {
+public class OthelloGameApp implements ApplicationListener<ApplicationEvent>,ApplicationContextAware{
 
     public static final String CFG_SOCKETIO_HOST = "othellogameserver.socketio.host";
     public static final String CFG_SOCKETIO_PORT = "othellogameserver.socketio.port";
 
     private static final Logger logger = LoggerFactory.getLogger(OthelloGameApp.class);
 
-	@Autowired
-	private SocketIOServer socketIOServer;
+    @Autowired
+    private SocketIOServer socketIOServer;
 
-	public static void main(String[] args) {
-		SpringApplication.run(OthelloGameApp.class, args);
-	}
+    public static void main(String[] args) {
+        DevHelper.initDb(args);
+        SpringApplication.run(OthelloGameApp.class, args);
+    }
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Environment env = applicationContext.getEnvironment();
-	}
+    }
 
-	@Override
-	public void onApplicationEvent(ApplicationEvent event) {
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
             logger.info("Spring 容器初始化完毕，开始启动SocketIO服务器");
             socketIOServer.start();
@@ -52,5 +52,6 @@ public class OthelloGameApp implements ApplicationListener<ApplicationEvent>, Ap
             logger.info("Spring 容器已经关闭，开始关闭SocketIO服务器");
             socketIOServer.stop();
         }
-	}
+    }
+
 }
