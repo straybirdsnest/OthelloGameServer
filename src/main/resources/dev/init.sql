@@ -70,8 +70,8 @@ CREATE TABLE OTHELLO_MEMBERSHIP (
 
 # 插入数据
 #用户组信息
-INSERT INTO `othellogamedb`.`othello_user_group`(`user_group_id`,`user_group_name`) VALUES('1','ROLE(USER)');
-INSERT INTO `othellogamedb`.`othello_user_group`(`user_group_id`,`user_group_name`) VALUES('2','ROLE(ADMIN)');
+INSERT INTO `othellogamedb`.`othello_user_group`(`user_group_id`,`user_group_name`) VALUES('1','ROLE_USER');
+INSERT INTO `othellogamedb`.`othello_user_group`(`user_group_id`,`user_group_name`) VALUES('2','ROLE_ADMIN');
 
 #用户信息
 INSERT INTO `othellogamedb`.`othello_user`
@@ -82,6 +82,11 @@ INSERT INTO `othellogamedb`.`othello_user`
 (`user_id`, `create_time`, `email_address`, `is_active`, `password`, `username`, `user_group`, `socketioid`)
 VALUES
 ('2', '2015-01-01 00:00:01', 'black@black.com', '1', 'black', 'black', '2', 'e654e692-f232-4a84-a610-d1621af981c4');
+
+INSERT INTO `othellogamedb`.`othello_user_information` (`user_id`, `nickname`, `gender`, `birthday`, `game_wins`, `game_draws`, `game_losts`, `rank_points`)
+VALUES ('1', 'test', 'MALE', '1990-11-11', '0', '0', '0', '0');
+INSERT INTO `othellogamedb`.`othello_user_information` (`user_id`, `nickname`, `gender`, `birthday`, `game_wins`, `game_draws`, `game_losts`, `rank_points`)
+VALUES ('2', 'black', 'FEMALE', '2000-11-11', '0', '0', '0', '0');
 
 #用户所属的用户组
 INSERT INTO `othellogamedb`.`othello_membership`(`othello_user_group`, `user_group_members`) VALUES ('1', '1');
