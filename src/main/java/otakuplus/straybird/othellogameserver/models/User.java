@@ -13,17 +13,14 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Table(name = "OthelloUser")
 public class User {
-	
-	//@JsonView(UserView.ClientUser.class)
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long userId;
-	
-	//@JsonView(UserView.ClientUser.class)
+	private Integer userId;
+
 	@NotNull
 	private String username;
-	
-	//@JsonView(UserView.ClientUser.class)
+
 	@NotNull
 	private String emailAddress;
 
@@ -31,7 +28,6 @@ public class User {
 	@NotNull
 	private String password;
 
-    //@JsonView(UserView.ClientUser.class)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT+8")
 	@CreationTimestamp
 	@NotNull
@@ -66,15 +62,15 @@ public class User {
 
 	}
 
-	public User(Long userId) {
+	public User(Integer userId) {
 		this.userId = userId;
 	}
 
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

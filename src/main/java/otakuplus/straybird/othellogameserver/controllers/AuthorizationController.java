@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import otakuplus.straybird.othellogameserver.models.SecurityUser;
 import otakuplus.straybird.othellogameserver.models.User;
-import otakuplus.straybird.othellogameserver.models.UserRepository;
+import otakuplus.straybird.othellogameserver.daos.UserRepository;
 import otakuplus.straybird.othellogameserver.network.Login;
 import otakuplus.straybird.othellogameserver.network.Logout;
 

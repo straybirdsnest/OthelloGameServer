@@ -15,6 +15,7 @@ import otakuplus.straybird.othellogameserver.network.*;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import otakuplus.straybird.othellogameserver.services.SocketIOService;
 
 import java.util.UUID;
 
@@ -22,13 +23,6 @@ import java.util.UUID;
 public class OthelloGameServerConfig {
 
 	public static final String SERVER_ORIGIN = "http://localhost:8080";
-
-	public static final String GAME_HALL_ROOM = "gamehall";
-	public static final String GAME_TABLE_ROOM = "gametable";
-	public static final String SEND_MESSAGE_EVENT = "sendMessage";
-	public static final String GAME_OPERATION_EVENT = "gameOperation";
-	public static final String NOTIFY_USER_INFORMATIONS_UPDATE = "notifyUserInformationsUpdate";
-	public static final String NOTIFY_GAME_TABLES_UPDATE="notifyGameTablesUpdate";
 
 	private static final Logger logger = LoggerFactory.getLogger(OthelloGameServerConfig.class);
 
@@ -67,19 +61,19 @@ public class OthelloGameServerConfig {
 			}
 		});
 
-		socketIOServer.addEventListener(SEND_MESSAGE_EVENT, SendMessage.class, new DataListener<SendMessage>() {
+		socketIOServer.addEventListener(SocketIOService.SEND_MESSAGE_EVENT, SendMessage.class, new DataListener<SendMessage>() {
 			@Override
 			public void onData(SocketIOClient socketIOClient, SendMessage sendMessage, AckRequest ackRequest) throws Exception {
 				socketIOServer.getRoomOperations(sendMessage.getRoomName())
-						.sendEvent(SEND_MESSAGE_EVENT, sendMessage);
+						.sendEvent(SocketIOService.SEND_MESSAGE_EVENT, sendMessage);
 			}
 		});
 
-		socketIOServer.addEventListener(GAME_OPERATION_EVENT, GameOperation.class, new DataListener<GameOperation>() {
+		socketIOServer.addEventListener(SocketIOService.GAME_OPERATION_EVENT, GameOperation.class, new DataListener<GameOperation>() {
 			@Override
 			public void onData(SocketIOClient socketIOClient, GameOperation gameOperation, AckRequest ackRequest) throws Exception {
 				socketIOServer.getRoomOperations(gameOperation.getRoomName())
-						.sendEvent(GAME_OPERATION_EVENT, gameOperation);
+						.sendEvent(SocketIOService.GAME_OPERATION_EVENT, gameOperation);
 			}
 		});
 

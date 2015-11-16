@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import otakuplus.straybird.othellogameserver.daos.UserOnlineRepository;
+import otakuplus.straybird.othellogameserver.daos.UserRepository;
 import otakuplus.straybird.othellogameserver.models.*;
 import otakuplus.straybird.othellogameserver.network.NotifyUpdateUserInformations;
 import otakuplus.straybird.othellogameserver.network.SendMessage;

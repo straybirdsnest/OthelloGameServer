@@ -2,6 +2,8 @@ package otakuplus.straybird.othellogameserver.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import otakuplus.straybird.othellogameserver.daos.GameTableRepository;
+import otakuplus.straybird.othellogameserver.daos.UserRepository;
 import otakuplus.straybird.othellogameserver.models.*;
 import otakuplus.straybird.othellogameserver.network.NotifyUpdateGameTables;
 import otakuplus.straybird.othellogameserver.network.SendMessage;
