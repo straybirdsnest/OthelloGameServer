@@ -43,10 +43,10 @@ public class GameHallController {
                     sendMessage.setNickname("[Othello Server]");
                     sendMessage.setMessage(userInformation.getNickname() + "进入游戏大厅");
                     sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
-                    sendMessage.setRoomName(socketIOService.GAME_HALL_ROOM);
+                    sendMessage.setRoomName(SocketIOService.GAME_HALL_ROOM);
                     socketIOService.sendMessage(sendMessage);
                     NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();
-                    notifyUpdateUserInformations.setRoomName(socketIOService.GAME_HALL_ROOM);
+                    notifyUpdateUserInformations.setRoomName(SocketIOService.GAME_HALL_ROOM);
                     socketIOService.notifyUpdateUserInformationList(notifyUpdateUserInformations);
                 }
             }
@@ -63,14 +63,14 @@ public class GameHallController {
             userOnlineRepository.save(userOnline);
             String socketIOId = user.getSocketIOId();
             if (socketIOId != null) {
-                socketIOService.leaveClientFromRoom(socketIOId, socketIOService.GAME_HALL_ROOM);
+                socketIOService.leaveClientFromRoom(socketIOId, SocketIOService.GAME_HALL_ROOM);
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setNickname("[Othello Server]");
                 sendMessage.setMessage(userInformation.getNickname() + "离开游戏大厅");
                 sendMessage.setSendTime(ZonedDateTime.now(ZoneId.of("GMT+8")).toString());
-                sendMessage.setRoomName(socketIOService.GAME_HALL_ROOM);
+                sendMessage.setRoomName(SocketIOService.GAME_HALL_ROOM);
                 NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();
-                notifyUpdateUserInformations.setRoomName(socketIOService.GAME_HALL_ROOM);
+                notifyUpdateUserInformations.setRoomName(SocketIOService.GAME_HALL_ROOM);
                 socketIOService.notifyUpdateUserInformationList(notifyUpdateUserInformations);
             }
         }

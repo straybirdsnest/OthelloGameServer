@@ -1,5 +1,7 @@
 package otakuplus.straybird.othellogameserver.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import otakuplus.straybird.othellogameserver.daos.GameTableRepository;
@@ -17,6 +19,8 @@ import java.time.ZonedDateTime;
 @RestController
 public class GameTableController {
 
+    private static final Logger logger = LoggerFactory.getLogger(GameTableController.class);
+
     @Autowired
     SocketIOService socketIOService;
 
@@ -32,11 +36,11 @@ public class GameTableController {
         UserInformation userInformation = user.getUserInformation();
         GameTable gameTable = gameTableRepository.findOne(gameTableId);
         if (user != null && gameTable != null) {
-            if (seatId == 0L &&
+            if (seatId == 0 &&
                     (gameTable.getPlayerA() == null ||
                             (gameTable.getPlayerA() != null && gameTable.getPlayerA().getUserId() != userId))) {
                 gameTable.setPlayerA(user);
-            } else if (seatId == 1L &&
+            } else if (seatId == 1 &&
                     (gameTable.getPlayerB() == null ||
                             (gameTable.getPlayerB() != null && gameTable.getPlayerB().getUserId() != userId))) {
                 gameTable.setPlayerB(user);
@@ -55,8 +59,8 @@ public class GameTableController {
                 NotifyUpdateGameTables notifyUpdateGameTables = new NotifyUpdateGameTables();
                 notifyUpdateGameTables.setRoomName(SocketIOService.GAME_HALL_ROOM);
                 socketIOService.notifyUpdateGameTableList(notifyUpdateGameTables);
+                logger.debug("room name" + SocketIOService.GAME_TABLE_ROOM + gameTableId);
             }
-            System.out.println("room name" + SocketIOService.GAME_TABLE_ROOM + gameTableId);
         }
     }
 

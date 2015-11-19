@@ -6,7 +6,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,9 @@ public class OthelloGameServerConfig {
 
     @Autowired
     Environment env;
+
+    @Autowired
+    ObjectMapper jacksonObjectMapper;
 
     @Bean
     public SocketIOServer socketIOServer() {
@@ -53,9 +56,7 @@ public class OthelloGameServerConfig {
 
             @Override
             public void onDisconnect(SocketIOClient socketIOClient) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("Server", "user disconnected.");
-                //socketIOServer.getBroadcastOperations().sendEvent("disconnect", jsonObject);
+
                 UUID sessionId = socketIOClient.getSessionId();
                 logger.info("socket.io client" + sessionId + " disconnect to server.");
             }
@@ -72,6 +73,8 @@ public class OthelloGameServerConfig {
         socketIOServer.addEventListener(SocketIOService.GAME_OPERATION_EVENT, GameOperation.class, new DataListener<GameOperation>() {
             @Override
             public void onData(SocketIOClient socketIOClient, GameOperation gameOperation, AckRequest ackRequest) throws Exception {
+                logger.debug("receive game operation event");
+                logger.debug("null or "+gameOperation.getSetX());
                 socketIOServer.getRoomOperations(gameOperation.getRoomName())
                         .sendEvent(SocketIOService.GAME_OPERATION_EVENT, gameOperation);
             }

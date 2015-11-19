@@ -94,12 +94,6 @@
 			<artifactId>netty-socketio</artifactId>
 			<version>1.7.6</version>
 		</dependency>
-		<!-- org.json -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20141113</version>
-		</dependency>
 		<!-- 调试检测工具 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

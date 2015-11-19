@@ -2,8 +2,11 @@ package otakuplus.straybird.othellogameserver.services;
 
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import otakuplus.straybird.othellogameserver.network.GameOperation;
 import otakuplus.straybird.othellogameserver.network.NotifyUpdateGameTables;
 import otakuplus.straybird.othellogameserver.network.NotifyUpdateUserInformations;
 import otakuplus.straybird.othellogameserver.network.SendMessage;
@@ -12,6 +15,8 @@ import java.util.UUID;
 
 @Service
 public class SocketIOService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SocketIOService.class);
 
     public static final String GAME_HALL_ROOM = "gamehall";
     public static final String GAME_TABLE_ROOM = "gametable";
@@ -60,6 +65,13 @@ public class SocketIOService {
         if (notifyUpdateGameTables != null) {
             socketIOServer.getRoomOperations(notifyUpdateGameTables.getRoomName())
                     .sendEvent(NOTIFY_GAME_TABLES_UPDATE, notifyUpdateGameTables);
+        }
+    }
+
+    public void notifyGameOperation(GameOperation gameOperation) {
+        if (gameOperation != null) {
+            socketIOServer.getRoomOperations(gameOperation.getRoomName())
+                    .sendEvent(GAME_OPERATION_EVENT, gameOperation);
         }
     }
 }

@@ -7,9 +7,9 @@ public class GameOperation {
     public static final String WHITE_SET = "whiteSet";
 
     private String roomName;
-    private Long seatId;
-    private Long setX;
-    private Long setY;
+    private Integer seatId;
+    private Integer setX;
+    private Integer setY;
     private String operation;
 
     public String getRoomName() {
@@ -20,27 +20,27 @@ public class GameOperation {
         this.roomName = roomName;
     }
 
-    public Long getSeatId() {
+    public Integer getSeatId() {
         return seatId;
     }
 
-    public void setSeatId(Long seatId) {
+    public void setSeatId(Integer seatId) {
         this.seatId = seatId;
     }
 
-    public Long getSetX() {
+    public Integer getSetX() {
         return setX;
     }
 
-    public void setSetX(Long setX) {
+    public void setSetX(Integer setX) {
         this.setX = setX;
     }
 
-    public Long getSetY() {
+    public Integer getSetY() {
         return setY;
     }
 
-    public void setSetY(Long setY) {
+    public void setSetY(Integer setY) {
         this.setY = setY;
     }
 
