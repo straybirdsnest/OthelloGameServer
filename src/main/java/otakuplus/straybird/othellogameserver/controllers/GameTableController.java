@@ -129,4 +129,59 @@ public class GameTableController {
             }
         }
     }
+
+    @RequestMapping(value = "/api/gameTables/{gameTableId}/seats/{seatId}/draw", method = RequestMethod.POST)
+    public void draw(@PathVariable Integer gameTableId, @PathVariable Integer seatId, @RequestBody Integer userId){
+        User user = userRepository.findOne(userId);
+        User anotherUser = null;
+        UserInformation userInformation = user.getUserInformation();
+        userInformation.setGameDraws(userInformation.getGameDraws()+1);
+        userInformation.setRankPoints(userInformation.getRankPoints()+1);
+        userInformationRepository.save(userInformation);
+        UserInformation anotherUserInformation = null;
+        GameTable gameTable = gameTableRepository.findOne(gameTableId);
+        if (user != null && gameTable != null) {
+            if (seatId == 0) {
+                anotherUser = gameTable.getPlayerB();
+            } else if (seatId == 1) {
+                anotherUser = gameTable.getPlayerA();
+            }
+            if(anotherUser != null) {
+                anotherUserInformation = anotherUser.getUserInformation();
+                anotherUserInformation.setGameDraws(anotherUserInformation.getGameDraws()+1);
+                anotherUserInformation.setRankPoints(anotherUserInformation.getRankPoints()+1);
+                userInformationRepository.save(anotherUserInformation);
+                NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();
+                notifyUpdateUserInformations.setRoomName(SocketIOService.GAME_HALL_ROOM);
+                socketIOService.notifyUpdateUserInformationList(notifyUpdateUserInformations);
+            }
+        }
+    }
+
+    @RequestMapping(value = "/api/gameTables/{gameTableId}/seats/{seatId}/win", method = RequestMethod.POST)
+    public void win(@PathVariable Integer gameTableId, @PathVariable Integer seatId, @RequestBody Integer userId){
+        User user = userRepository.findOne(userId);
+        User anotherUser = null;
+        UserInformation userInformation = user.getUserInformation();
+        userInformation.setGameWins(userInformation.getGameWins()+1);
+        userInformation.setRankPoints(userInformation.getRankPoints()+3);
+        userInformationRepository.save(userInformation);
+        UserInformation anotherUserInformation = null;
+        GameTable gameTable = gameTableRepository.findOne(gameTableId);
+        if (user != null && gameTable != null) {
+            if (seatId == 0) {
+                anotherUser = gameTable.getPlayerB();
+            } else if (seatId == 1) {
+                anotherUser = gameTable.getPlayerA();
+            }
+            if(anotherUser != null) {
+                anotherUserInformation = anotherUser.getUserInformation();
+                anotherUserInformation.setGameLosts(anotherUserInformation.getGameLosts()+1);
+                userInformationRepository.save(anotherUserInformation);
+                NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();
+                notifyUpdateUserInformations.setRoomName(SocketIOService.GAME_HALL_ROOM);
+                socketIOService.notifyUpdateUserInformationList(notifyUpdateUserInformations);
+            }
+        }
+    }
 }

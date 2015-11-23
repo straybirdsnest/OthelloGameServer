@@ -160,7 +160,7 @@ public class DevHelper {
                 stat.execute(sql4);
             }
             */
-            for(int id=1;id<11;id++){
+            for(int id=1;id<13;id++){
                 String sql = "INSERT INTO `othellogamedb`.`othello_game_table` (`game_table_id`) VALUES ('"+id+"');";
                 stat.execute(sql);
             }

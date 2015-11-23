@@ -6,6 +6,8 @@ public class GameOperation {
     public static final String BLACK_SET = "blackSet";
     public static final String WHITE_SET = "whiteSet";
     public static final String GIVE_UP = "giveUp";
+    public static final String DRAW = "draw";
+    public static final String DRAW_AGREE = "drawAgree";
 
     private String roomName;
     private Integer seatId;
