@@ -34,11 +34,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/csrftoken").permitAll()
                 .antMatchers("/api/authorization").permitAll()
                 .antMatchers("/api/crsftoken").permitAll()
+                .antMatchers("/api/register").permitAll()
                 .antMatchers("/register").permitAll()
-                .antMatchers("/api/**").hasRole("USER").anyRequest().authenticated();
+                .antMatchers("/api/**").hasAnyRole("USER","ADMIN").anyRequest().authenticated()
         // @formatter:on
 
-        http.formLogin().loginProcessingUrl("/api/login/").permitAll();
+                .and().
+                formLogin()
+                .loginPage("/signin")
+                .loginProcessingUrl("/api/signin")
+                .permitAll();
 
         // CSRF tokens handling
         http.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);

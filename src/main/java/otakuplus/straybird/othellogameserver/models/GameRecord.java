@@ -24,6 +24,8 @@ public class GameRecord {
     private Date gameEndTime;
     private int whiteNumber;
     private int blackNumber;
+    @Column(columnDefinition = "TINYBLOB")
+    private byte[] record;
 
     public Integer getGameRecordId() {
         return gameRecordId;
@@ -81,5 +83,12 @@ public class GameRecord {
         this.blackNumber = blackNumber;
     }
 
+    public byte[] getRecord() {
+        return record;
+    }
+
+    public void setRecord(byte[] record) {
+        this.record = record;
+    }
 }
 

@@ -57,6 +57,7 @@ CREATE TABLE OTHELLO_GAME_RECORD (
   `game_end_time`      DATETIME,
   `playera`            INT,
   `playerb`            INT,
+  `record`             TINYBLOB,
    FOREIGN KEY (`playera`) REFERENCES OTHELLO_USER (user_id),
    FOREIGN KEY (`playerb`) REFERENCES OTHELLO_USER (user_id)
 );

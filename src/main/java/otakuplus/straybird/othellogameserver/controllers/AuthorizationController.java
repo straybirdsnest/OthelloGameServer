@@ -47,6 +47,6 @@ public class AuthorizationController {
                 logger.info("Logout with {}", authentication);
             }
         }
-
     }
+
 }

@@ -8,7 +8,7 @@ import otakuplus.straybird.othellogameserver.models.User;
 
 @RestController
 public class RegisterController {
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/register", method = RequestMethod.POST)
     public void userRegister(@RequestBody User user) {
 
     }
