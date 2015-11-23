@@ -4,12 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import otakuplus.straybird.othellogameserver.daos.GameRecordRepository;
 import otakuplus.straybird.othellogameserver.daos.GameTableRepository;
+import otakuplus.straybird.othellogameserver.daos.UserInformationRepository;
 import otakuplus.straybird.othellogameserver.daos.UserRepository;
 import otakuplus.straybird.othellogameserver.models.GameTable;
 import otakuplus.straybird.othellogameserver.models.User;
 import otakuplus.straybird.othellogameserver.models.UserInformation;
 import otakuplus.straybird.othellogameserver.network.NotifyUpdateGameTables;
+import otakuplus.straybird.othellogameserver.network.NotifyUpdateUserInformations;
 import otakuplus.straybird.othellogameserver.network.SendMessage;
 import otakuplus.straybird.othellogameserver.services.SocketIOService;
 
@@ -29,6 +32,12 @@ public class GameTableController {
 
     @Autowired
     GameTableRepository gameTableRepository;
+
+    @Autowired
+    GameRecordRepository gameRecordRepository;
+
+    @Autowired
+    UserInformationRepository userInformationRepository;
 
     @RequestMapping(value = "/api/gameTables/{gameTableId}/seats/{seatId}/enter", method = RequestMethod.POST)
     public void enterGameTable(@PathVariable Integer gameTableId, @PathVariable Integer seatId, @RequestBody Integer userId) {
@@ -70,9 +79,9 @@ public class GameTableController {
         UserInformation userInformation = user.getUserInformation();
         GameTable gameTable = gameTableRepository.findOne(gameTableId);
         if (user != null && gameTable != null) {
-            if (seatId == 0L) {
+            if (seatId == 0) {
                 gameTable.setPlayerA(null);
-            } else if (seatId == 1L) {
+            } else if (seatId == 1) {
                 gameTable.setPlayerB(null);
             }
             gameTableRepository.save(gameTable);
@@ -90,6 +99,33 @@ public class GameTableController {
                 NotifyUpdateGameTables notifyUpdateGameTables = new NotifyUpdateGameTables();
                 notifyUpdateGameTables.setRoomName(SocketIOService.GAME_HALL_ROOM);
                 socketIOService.notifyUpdateGameTableList(notifyUpdateGameTables);
+            }
+        }
+    }
+
+    @RequestMapping(value = "/api/gameTables/{gameTableId}/seats/{seatId}/giveUp", method = RequestMethod.POST)
+    public void giveUp(@PathVariable Integer gameTableId, @PathVariable Integer seatId, @RequestBody Integer userId){
+        User user = userRepository.findOne(userId);
+        User anotherUser = null;
+        UserInformation userInformation = user.getUserInformation();
+        userInformation.setGameLosts(userInformation.getGameLosts()+1);
+        userInformationRepository.save(userInformation);
+        UserInformation anotherUserInformation = null;
+        GameTable gameTable = gameTableRepository.findOne(gameTableId);
+        if (user != null && gameTable != null) {
+            if (seatId == 0) {
+                anotherUser = gameTable.getPlayerB();
+            } else if (seatId == 1) {
+                anotherUser = gameTable.getPlayerA();
+            }
+            if(anotherUser != null) {
+                anotherUserInformation = anotherUser.getUserInformation();
+                anotherUserInformation.setGameWins(anotherUserInformation.getGameWins()+1);
+                anotherUserInformation.setRankPoints(anotherUserInformation.getRankPoints()+3);
+                userInformationRepository.save(anotherUserInformation);
+                NotifyUpdateUserInformations notifyUpdateUserInformations = new NotifyUpdateUserInformations();
+                notifyUpdateUserInformations.setRoomName(SocketIOService.GAME_HALL_ROOM);
+                socketIOService.notifyUpdateUserInformationList(notifyUpdateUserInformations);
             }
         }
     }

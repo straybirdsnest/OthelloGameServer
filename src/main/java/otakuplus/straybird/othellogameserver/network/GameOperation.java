@@ -5,6 +5,7 @@ public class GameOperation {
     public static final String STAND_BY_CANCLE = "standByCancle";
     public static final String BLACK_SET = "blackSet";
     public static final String WHITE_SET = "whiteSet";
+    public static final String GIVE_UP = "giveUp";
 
     private String roomName;
     private Integer seatId;
