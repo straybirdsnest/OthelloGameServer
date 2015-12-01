@@ -8,6 +8,8 @@ public class GameOperation {
     public static final String GIVE_UP = "giveUp";
     public static final String DRAW = "draw";
     public static final String DRAW_AGREE = "drawAgree";
+    public static final String TAKE_BACK = "takeBack";
+    public static final String TAKE_BACK_AGREE = "takeBackAgree";
 
     private String roomName;
     private Integer seatId;

@@ -17,6 +17,8 @@ import otakuplus.straybird.othellogameserver.network.Login;
 import otakuplus.straybird.othellogameserver.network.Logout;
 import otakuplus.straybird.othellogameserver.services.UserService;
 
+import java.security.Principal;
+
 @RestController
 public class AuthorizationController {
 
@@ -47,6 +49,11 @@ public class AuthorizationController {
                 logger.info("Logout with {}", authentication);
             }
         }
+    }
+
+    @RequestMapping(value = "/api/user" ,method = RequestMethod.GET)
+    public Principal currentUser(Principal user) {
+        return user;
     }
 
 }

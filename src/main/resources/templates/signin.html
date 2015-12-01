@@ -10,15 +10,15 @@
     <link rel="stylesheet" type="text/css" href="/css/signin.css" />
 
 </head>
-<body ng-app="register">
+<body>
 
     <div class="container">
 
       <form class="form-signin" action="/api/signin" method="post">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="text" id="usernmae" name="username" class="form-control" placeholder="Username" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
+        <label for="username" class="sr-only">Email address</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+        <label for="password" class="sr-only">Password</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="checkbox">
@@ -33,7 +33,5 @@
 
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-    <script src="http://cdn.bootcss.com/angular.js/1.4.7/angular.js"></script>
-    <script src="/js/controller.js"></script>
 </body>
 </html>
