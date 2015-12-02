@@ -3,8 +3,9 @@
 >
 <head>
     <title>Othello Game Server</title>
-    <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-3.3.5-dist/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/css/signin.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/register.css"/>
     <style type="text/css">
         [ng\:cloak], [ng-cloak], .ng-cloak {
         display: none !important;
@@ -15,17 +16,18 @@
 <body ng-app="othellogameweb" ng-cloak class="ng-cloak">
 <div ng-controller="navigation" class="container">
     <ul class="nav nav-pills" role="tablist">
-        <li class="active"><a href="#/">home</a></li>
-        <li ng-show="!authenticated"><a href="#/login">login</a></li>
-        <li ng-show="!authenticated"><a href="#/register">register</a></li>
-        <li ng-show="authenticated"><a href="#/profile">profile</a></li>
-        <li ng-show="authenticated"><a href="" ng-click="logout()">logout</a></li>
+        <li class="active"><a href="#/">主页</a></li>
+        <li ng-show="roleAdmin"><a href="#/admin">管理员工具</a></li>
+        <li ng-show="!authenticated"><a href="#/login">登录</a></li>
+        <li ng-show="!authenticated"><a href="#/register">注册</a></li>
+        <li ng-show="authenticated"><a href="#/profile">个人资料</a></li>
+        <li ng-show="authenticated"><a href="" ng-click="logout()">注销</a></li>
     </ul>
 </div>
 <div ng-view class="container"></div>
-<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
-<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-<script src="http://cdn.bootcss.com/angular.js/1.4.7/angular.js"></script>
+<script src="/js/jquery-2.1.4.js"></script>
+<script src="/js/bootstrap-3.3.5.js"></script>
+<script src="/js/angular-1.4.7.js"></script>
 <script src="/js/angular-route-1.4.7.js"></script>
 <script src="/js/angular-animate-1.4.7.js"></script>
 <script src="/js/controller.js"></script>

@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http.authorizeRequests()
                 .antMatchers(freeAccesssUrls).permitAll()
+                .antMatchers("/api/admin/**").hasRole("ADMIN").anyRequest().authenticated()
                 .antMatchers("/api/**").hasAnyRole("USER","ADMIN").anyRequest().authenticated();
         // @formatter:on
 
