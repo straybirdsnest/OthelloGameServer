@@ -29,24 +29,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity http) throws Exception {
+        String freeAccesssUrls[] = {
+                "/",
+                "/index",
+                "/api/csrftoken",
+                "/api/authorization",
+                "/api/register",
+                "/api/login",
+                "/api/signin",
+                "/api/user/**",
+                "/#/**",
+                "/partials/**"
+        };
         // @formatter:off
         http.authorizeRequests()
-                .antMatchers("/api/csrftoken").permitAll()
-                .antMatchers("/api/authorization").permitAll()
-                .antMatchers("/api/crsftoken").permitAll()
-                .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/signin").permitAll()
-                .antMatchers("/register").permitAll()
-                .antMatchers("/").permitAll()
-                .antMatchers("/home").permitAll()
-                .antMatchers("/api/**").hasAnyRole("USER","ADMIN").anyRequest().authenticated()
+                .antMatchers(freeAccesssUrls).permitAll()
+                .antMatchers("/api/**").hasAnyRole("USER","ADMIN").anyRequest().authenticated();
         // @formatter:on
 
-                .and().
-                formLogin()
-                .loginPage("/api/signin")
-                .loginProcessingUrl("/api/signin")
-                .permitAll();
+        //.and().
+        //formLogin()
+        //.loginPage("/api/signin")
+        //.loginProcessingUrl("/api/signin")
+        //.permitAll();
 
         // CSRF tokens handling
         http.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);

@@ -38,4 +38,12 @@ public class UserGroup {
     public void setUserGroupName(String userGroupName) {
         this.userGroupName = userGroupName;
     }
+
+    public Set<User> getUserGroupMembers() {
+        return userGroupMembers;
+    }
+
+    public void setUserGroupMembers(Set<User> userGroupMembers) {
+        this.userGroupMembers = userGroupMembers;
+    }
 }

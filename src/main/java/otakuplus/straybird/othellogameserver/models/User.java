@@ -30,7 +30,6 @@ public class User {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd,HH:00", timezone = "GMT+8")
     @CreationTimestamp
-    @NotNull
     private Date createTime;
 
     @NotNull
@@ -52,8 +51,8 @@ public class User {
     @JsonIgnore
     @ManyToOne
     @JoinTable(name = "OTHELLO_MEMBERSHIP",
-            joinColumns = {@JoinColumn(name = "othello_user_group")},
-            inverseJoinColumns = {@JoinColumn(name = "user_group_members")}
+            joinColumns = {@JoinColumn(name = "user_group_members")},
+            inverseJoinColumns = {@JoinColumn(name = "othello_user_group")}
     )
     private UserGroup userGroup;
 

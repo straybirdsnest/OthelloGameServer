@@ -1,5 +1,6 @@
 package otakuplus.straybird.othellogameserver.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import otakuplus.straybird.othellogameserver.config.json.UserView;
 import otakuplus.straybird.othellogameserver.daos.UserRepository;
 import otakuplus.straybird.othellogameserver.models.User;
 import otakuplus.straybird.othellogameserver.network.Login;
@@ -52,8 +54,15 @@ public class AuthorizationController {
     }
 
     @RequestMapping(value = "/api/user" ,method = RequestMethod.GET)
-    public Principal currentUser(Principal user) {
-        return user;
+    @JsonView(UserView.WebUser.class)
+    public ResponseEntity<?> currentUser(Principal principal) {
+        logger.debug("principal"+principal.getName());
+        String username = principal.getName();
+        User user = userRepository.findOneByUsername(username);
+        if(user == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 }

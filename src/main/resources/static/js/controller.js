@@ -1,58 +1,68 @@
-angular.module('othellogameweb', [ 'ngRoute' ])
+angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
   .config(function($routeProvider, $httpProvider) {
 
 	$routeProvider.when('/', {
-		templateUrl : 'home',
+		templateUrl : '/partials/home',
 		controller : 'home'
 	}).when('/login', {
-		templateUrl : 'login',
+		templateUrl : '/partials/login',
 		controller : 'navigation'
 	}).when('/register', {
-	    templateUrl : 'register',
+	    templateUrl : '/partials/register',
 	    controller  : 'navigation'
+	}).when('/profile',{
+	    templateUrl : '/partials/user/profile',
+	    controller : 'profile'
 	}).otherwise('/');
 
   })
-  .controller('home', function($scope, $http) {
-    $http.get('/api/user').success(function(data) {
-      $scope.user = data;
-    })
+  .controller('home', function($rootScope, $scope, $http) {
+  if($rootScope.user)
+  {
+    var profileUrl = "/api/userInformations/"+$rootScope.user.userId.toString();
+    $http.get(profileUrl).success(function(data)
+    {
+       $scope.userInformation = data;
+     });
+   }
   })
   .controller('navigation', function($rootScope, $scope, $http, $location) {
 
-    var authenticate = function(credentials, callback) {
-
-        $http.post('/api/authorization', {headers : headers}).success(function(data) {
-          if (data.name) {
-            $rootScope.authenticated = true;
-          } else {
-            $rootScope.authenticated = false;
-          }
-          callback && callback();
-        }).error(function() {
-          $rootScope.authenticated = false;
-          callback && callback();
-        });
-
-      }
-    $scope.credentials = {};
-    $scope.login = function() {
-          authenticate($scope.credentials, function() {
-            if ($rootScope.authenticated) {
+    $scope.userLogin = function() {
+       $http.post('/api/authorization', $scope.login).success(function(data){
+         $rootScope.user = data;
+         if(data.username){
+              $rootScope.authenticated = true;
               $location.path("/");
               $scope.error = false;
-            } else {
-              $location.path("/login");
+            }else{
+              $rootScope.authenticated = false;
               $scope.error = true;
             }
-          });
+       })
       };
     $scope.logout = function() {
-       $http.post('logout', {}).success(function() {
+       $http.post('/api/logout', {}).success(function() {
          $rootScope.authenticated = false;
          $location.path("/");
        }).error(function(data) {
          $rootScope.authenticated = false;
        });
      }
+     $scope.registerUser = function(){
+       $http.post('/api/register', $scope.register).success(function()
+       {
+         console.log('register ok');
+       });
+     }
+  })
+  .controller('profile', function($rootScope, $scope, $http){
+    if($rootScope.user)
+      {
+        var profileUrl = "/api/userInformations/"+$rootScope.user.userId.toString();
+        $http.get(profileUrl).success(function(data)
+        {
+           $scope.userInformation = data;
+         });
+       }
   })

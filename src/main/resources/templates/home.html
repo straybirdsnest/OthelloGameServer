@@ -1,8 +1,11 @@
 <h1>Greeting</h1>
 <div ng-show="authenticated">
-    <p>The ID is {{user.username}}</p>
-    <p>The content is {{user.email}}</p>
+    <p>Username: {{user.username}}</p>
+
+    <p>Email: {{user.emailAddress}}</p>
+
+    <p>Nickname: {{userInformation.nickname}}</p>
 </div>
-<div  ng-show="!authenticated">
+<div ng-show="!authenticated">
     <p>Login to see your greeting</p>
 </div>
