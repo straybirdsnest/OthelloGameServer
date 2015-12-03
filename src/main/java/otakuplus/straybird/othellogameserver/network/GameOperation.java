@@ -4,6 +4,7 @@ public class GameOperation {
     public static final String STAND_BY = "standBy";
     public static final String STAND_BY_CANCLE = "standByCancle";
     public static final String BLACK_SET = "blackSet";
+    public static final String SKIP_SET = "skipSet";
     public static final String WHITE_SET = "whiteSet";
     public static final String GIVE_UP = "giveUp";
     public static final String DRAW = "draw";
