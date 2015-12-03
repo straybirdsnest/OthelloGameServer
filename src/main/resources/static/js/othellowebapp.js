@@ -34,6 +34,8 @@ angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
        $rootScope.userGroup = data;
        if($rootScope.userGroup.userGroupName == "ROLE_ADMIN"){
          $rootScope.roleAdmin = true;
+       }else{
+         $rootScope.roleAdmin = false;
        }
      });
    }

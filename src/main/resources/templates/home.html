@@ -11,10 +11,20 @@
                     </div>
                     <div class="col-sm-6 col-md-8">
                         <h4>{{user.username}}</h4>
+
                         <p>
                             <i class="glyphicon glyphicon-envelope"></i>{{user.emailAddress}}
                             <br/>
-                            <i class="glyphicon glyphicon-gift"></i>{{userInformation.birthday}}</p>
+                            <i class="glyphicon glyphicon-gift"></i>{{userInformation.birthday}}
+                            <br/>
+                            胜利：{{userInformation.gameWins}}
+                            <br/>
+                            平局：{{userInformation.gameDraws}}
+                            <br/>
+                            失败：{{userInformation.gameLosts}}
+                            <br/>
+                            积分：{{userInformation.rankPoints}}
+                        </p>
                     </div>
                 </div>
             </div>

@@ -67,6 +67,17 @@ public class AuthorizationController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/api/user/emailAddress", method = RequestMethod.POST)
+    public ResponseEntity<?> getEncodeEmailAddress(@RequestBody String username) {
+        logger.debug("find email for username " + username);
+        if (username == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        User user = userRepository.findOneByUsername(username);
+        String email = user.getEmailAddress();
+        return new ResponseEntity<>(email, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/api/user/forgetPassword", method = RequestMethod.POST)
     public ResponseEntity<?> forgetPassword(@RequestBody Register register) {
         logger.debug("call with regiseter " + register.getUsername());

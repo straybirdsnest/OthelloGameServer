@@ -94,72 +94,7 @@ public class DevHelper {
             isWindows = System.getProperty("os.name").startsWith("Windows");
 
             Statement stat = conn.createStatement();
-            /*
-            String sql = "INSERT INTO T_IMAGE(data) VALUES (LOAD_FILE('%s'))";
-            String wnmAvatar = DevHelper.class.getResource("/dev/wnm_avatar.png").getPath();
-            String wnmBg = DevHelper.class.getResource("/dev/wnm_bg.png").getPath();
-            if(isWindows){
-                wnmAvatar = wnmAvatar.substring(1);
-            }
-            stat.execute(String.format(sql, wnmAvatar));
 
-            if(isWindows){
-                wnmBg = wnmBg.substring(1);
-            }
-            stat.execute(String.format(sql, wnmBg));
-            String sql2 = "UPDATE T_USER SET avatar_id=1 WHERE id=1";
-            stat.execute(sql2);
-            String sql3 = "UPDATE T_USER SET background_image_id=2 WHERE id=1";
-            stat.execute(sql3);
-
-            String gameCS = DevHelper.class.getResource("/dev/game_cs.png").getPath();
-            if(isWindows){
-                gameCS = gameCS.substring(1);
-            }
-            stat.execute(String.format(sql, gameCS));
-            String gameDota2 = DevHelper.class.getResource("/dev/game_dota2.png").getPath();
-            if(isWindows){
-                gameDota2 = gameDota2.substring(1);
-            }
-            stat.execute(String.format(sql, gameDota2));
-            String gameHeartStone = DevHelper.class.getResource("/dev/game_hearthstone.png").getPath();
-            if(isWindows){
-                gameHeartStone = gameHeartStone.substring(1);
-            }
-            stat.execute(String.format(sql, gameDota2));
-            String gameLOL = DevHelper.class.getResource("/dev/game_lol.png").getPath();
-            if(isWindows){
-                gameLOL = gameLOL.substring(1);
-            }
-            stat.execute(String.format(sql, gameLOL));
-            String gameMineCraft = DevHelper.class.getResource("/dev/game_minecraft.png").getPath();
-            if(isWindows){
-                gameMineCraft = gameMineCraft.substring(1);
-            }
-            stat.execute(String.format(sql, gameMineCraft));
-            String gameStarCraft = DevHelper.class.getResource("/dev/game_starcraft.png").getPath();
-            if(isWindows){
-                gameStarCraft = gameStarCraft.substring(1);
-            }
-            stat.execute(String.format(sql, gameStarCraft));
-            String gameWarCraft = DevHelper.class.getResource("/dev/game_warcraft.png").getPath();
-            if(isWindows){
-                gameWarCraft = gameWarCraft.substring(1);
-            }
-            stat.execute(String.format(sql, gameWarCraft));
-
-            int imageid;
-            for(int id=1;id<8;id++){
-                imageid = id+2;
-                String sql4 = "UPDATE T_GAME SET logo_id="+imageid+" WHERE id="+id;
-                stat.execute(sql4);
-            }
-
-            for(int id=1;id<11;id++){
-                String sql4 = "UPDATE T_ACTIVITY SET cover_image_id=2, game_id="+(id%6+1)+" WHERE id="+id;
-                stat.execute(sql4);
-            }
-            */
             for(int id=1;id<13;id++){
                 String sql = "INSERT INTO `othellogamedb`.`othello_game_table` (`game_table_id`) VALUES ('"+id+"');";
                 stat.execute(sql);
