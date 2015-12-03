@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import otakuplus.straybird.othellogameserver.config.json.UserView;
 import otakuplus.straybird.othellogameserver.daos.UserRepository;
+import otakuplus.straybird.othellogameserver.models.Register;
 import otakuplus.straybird.othellogameserver.models.User;
 import otakuplus.straybird.othellogameserver.network.Login;
 import otakuplus.straybird.othellogameserver.network.Logout;
@@ -48,21 +49,43 @@ public class AuthorizationController {
             User user = userRepository.findOne(userId);
             if (user != null) {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                SecurityContextHolder.clearContext();
                 logger.info("Logout with {}", authentication);
             }
         }
     }
 
-    @RequestMapping(value = "/api/user" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
     @JsonView(UserView.WebUser.class)
     public ResponseEntity<?> currentUser(Principal principal) {
-        logger.debug("principal"+principal.getName());
+        logger.debug("principal" + principal.getName());
         String username = principal.getName();
         User user = userRepository.findOneByUsername(username);
-        if(user == null){
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/user/forgetPassword", method = RequestMethod.POST)
+    public ResponseEntity<?> forgetPassword(@RequestBody Register register) {
+        logger.debug("call with regiseter " + register.getUsername());
+        String username = register.getUsername();
+        String email = register.getEmailAddress();
+        String password = register.getPassword();
+        if (username == null || email == null || password == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        User user = userRepository.findOneByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (user.getEmailAddress().equals(email)) {
+            user.setPassword(password);
+            userRepository.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

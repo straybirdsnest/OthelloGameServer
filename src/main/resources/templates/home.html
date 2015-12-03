@@ -1,11 +1,26 @@
-<h1>Greeting</h1>
+<div class="alert alert-success" role="alert" ng-show="updateSuccess">
+    <p>您的个人信息已成功更新。</p>
+</div>
 <div ng-show="authenticated">
-    <p>用户名： {{user.username}}</p>
-
-    <p>电子邮箱：{{user.emailAddress}}</p>
-
-    <p>昵称：{{userInformation.nickname}}</p>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img src="/images/player.png" alt="" class="img-rounded img-responsive"/>
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h4>{{user.username}}</h4>
+                        <p>
+                            <i class="glyphicon glyphicon-envelope"></i>{{user.emailAddress}}
+                            <br/>
+                            <i class="glyphicon glyphicon-gift"></i>{{userInformation.birthday}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div ng-show="!authenticated">
-    <p>Login to see your greeting</p>
+    <p>请登录以使用本服务。</p>
 </div>
