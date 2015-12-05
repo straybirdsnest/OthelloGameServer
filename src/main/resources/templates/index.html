@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/home.css" th:href="@{/css/home.css}">
     <link rel="stylesheet" type="text/css" href="../static/css/login.css" th:href="@{/css/login.css}">
     <link rel="stylesheet" type="text/css" href="../static/css/register.css" th:href="@{/css/register.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/forget.css" th:href="@{/css/forget.css}">
     <!-- 后一个加载的会覆盖掉前面的设置 -->
     <link rel="stylesheet" type="text/css" href="../static/css/base.css" th:href="@{/css/base.css}">
     <style type=" text
@@ -51,26 +52,6 @@
         </nav>
     </div>
 </header>
-<!--
-<div ng-controller="navigation" class="container">
-    <ul class="nav nav-pills">
-        <li role="presentation" ng-class="{active:isActive('/home')}"><a href="#/home">主页</a></li>
-        <li role="presentation" ng-class="{active:isActive('/admin')}" ng-show="roleAdmin"><a href="#/admin">管理员工具</a>
-        </li>
-        <li role="presentation" ng-class="{active:isActive('/login')}" ng-show="!authenticated"><a href="#/login">登录</a>
-        </li>
-        <li role="presentation" ng-class="{active:isActive('/register')}" ng-show="!authenticated"><a href="#/register">注册</a>
-        </li>
-        <li role="presentation" ng-class="{active:isActive('/profile')}" ng-show="authenticated"><a href="#/profile">个人资料</a>
-        </li>
-        <li role="presentation" ng-class="{active:isActive('/logout')}" ng-show="authenticated"><a href=""
-                                                                                                   ng-click="logout()">注销</a>
-        </li>
-        <li role="presentation" ng-class="{active:isActive('/forgetPassowrd')}" ng-show="false"><a
-                href="#/forgetPassword">忘记密码</a></li>
-    </ul>
-</div>
--->
 <div ng-view class="container"></div>
 <footer class="footer">
     <div class="container text-center">

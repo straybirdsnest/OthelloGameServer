@@ -66,7 +66,7 @@ angular.module('othellogameweb', ['ui.bootstrap', 'ngRoute', 'ngAnimate'])
               }
          }).error(function(data, status){
            $scope.error = true;
-           $scope.alerts.push({type:'danger',msg:'登录过程发生了错误，请重试！'});
+           $scope.alerts.push({type:'danger',msg:'登录过程发生了错误，请重试。'});
          });
         };
   })
@@ -179,15 +179,20 @@ angular.module('othellogameweb', ['ui.bootstrap', 'ngRoute', 'ngAnimate'])
     }
   })
   .controller('forgetPassword', function($rootScope, $scope, $http, $location){
+    $scope.alerts = [];
+    $scope.closeAlert = function(index) {
+        if($scope.alerts[0].type == 'success'){
+          $location.path('/login');
+        }
+        $scope.alerts.splice(index, 1);
+    };
     $scope.findPassword = function(){
       $http.post('/api/user/forgetPassword', $scope.restetPassword).success(function(data, status){
         if(status == 200){
-          $scope.success = true;
-          $scope.error = false;
+          $scope.alerts.push({type : 'success', msg : '操作成功，已经将帐号的密码重设为新密码。'});
         }
       }).error(function(data, status){
-        $scope.success = false;
-        $scope.error = true;
+          $scope.alerts.push({type : 'danger', msg : '操作失败，请重试。'});
       });
     }
   })
@@ -207,5 +212,8 @@ angular.module('othellogameweb', ['ui.bootstrap', 'ngRoute', 'ngAnimate'])
          }).error(function(data, status){
            $scope.error = true;
          });
-       }
+    }
+    $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+    };
   })
