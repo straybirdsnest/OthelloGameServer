@@ -1,37 +1,108 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
->
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Othello Game Server</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap-3.3.5-dist/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="/css/signin.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/register.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/profile.css"/>
-    <style type="text/css">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-3.3.5-dist/bootstrap.css"
+          th:href="@{/css/bootstrap-3.3.5-dist/bootstrap.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css" th:href="@{/css/login.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/register.css" th:href="@{/css/register.css}">
+    <!-- 后一个加载的会覆盖掉前面的设置 -->
+    <link rel="stylesheet" type="text/css" href="../static/css/base.css" th:href="@{/css/base.css}">
+    <style type=" text
+    /css">
         [ng\:cloak], [ng-cloak], .ng-cloak {
         display: none !important;
         }
     </style>
 </head>
 
-<body ng-app="othellogameweb" ng-cloak class="ng-cloak">
+<body ng-app="othellogameweb" ng-cloak class="ng-cloak" ng-controller="navigation">
+<header class="navbar navbar-inverse navbar-fixed-top navbar-inner">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-3" ng-click="isCollapsed = !isCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand visible-xs" href="#">Othello Game</a>
+        </div>
+        <nav class="hidden-xs">
+            <ul class="nav navbar-nav">
+                <a href="#" role="button" class="navbar-brand">
+                    Othello Game
+                </a>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-show="!authenticated"><a href="#/login">登录</a></li>
+                <li class="dropdown" uib-dropdown ng-show="authenticated">
+                    <a role="button" class="dropdown-toggle" uib-dropdown-toggle>
+                        我的帐号 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/profile">帐号设置</a></li>
+                        <li ng-show="authenticated"><a href="#" ng-click="logout()">注销</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<!--
 <div ng-controller="navigation" class="container">
     <ul class="nav nav-pills">
         <li role="presentation" ng-class="{active:isActive('/home')}"><a href="#/home">主页</a></li>
-        <li role="presentation" ng-class="{active:isActive('/admin')}" ng-show="roleAdmin"><a href="#/admin">管理员工具</a></li>
-        <li role="presentation" ng-class="{active:isActive('/login')}" ng-show="!authenticated"><a href="#/login">登录</a></li>
-        <li role="presentation" ng-class="{active:isActive('/register')}" ng-show="!authenticated"><a href="#/register">注册</a></li>
-        <li role="presentation" ng-class="{active:isActive('/profile')}" ng-show="authenticated"><a href="#/profile">个人资料</a></li>
-        <li role="presentation" ng-class="{active:isActive('/logout')}" ng-show="authenticated"><a href="" ng-click="logout()">注销</a></li>
-        <li role="presentation" ng-class="{active:isActive('/forgetPassowrd')}" ng-show="false"><a href="#/forgetPassword">忘记密码</a></li>
+        <li role="presentation" ng-class="{active:isActive('/admin')}" ng-show="roleAdmin"><a href="#/admin">管理员工具</a>
+        </li>
+        <li role="presentation" ng-class="{active:isActive('/login')}" ng-show="!authenticated"><a href="#/login">登录</a>
+        </li>
+        <li role="presentation" ng-class="{active:isActive('/register')}" ng-show="!authenticated"><a href="#/register">注册</a>
+        </li>
+        <li role="presentation" ng-class="{active:isActive('/profile')}" ng-show="authenticated"><a href="#/profile">个人资料</a>
+        </li>
+        <li role="presentation" ng-class="{active:isActive('/logout')}" ng-show="authenticated"><a href=""
+                                                                                                   ng-click="logout()">注销</a>
+        </li>
+        <li role="presentation" ng-class="{active:isActive('/forgetPassowrd')}" ng-show="false"><a
+                href="#/forgetPassword">忘记密码</a></li>
     </ul>
 </div>
+-->
 <div ng-view class="container"></div>
-<script src="/js/jquery-2.1.4.js"></script>
-<script src="/js/bootstrap-3.3.5.js"></script>
-<script src="/js/angular-1.4.7.js"></script>
-<script src="/js/angular-route-1.4.7.js"></script>
-<script src="/js/angular-animate-1.4.7.js"></script>
-<script src="/js/othellowebapp.js"></script>
+<footer class="footer">
+    <div class="container text-center">
+        <strong>Powered by</strong>
+
+        <p class="text-muted">
+            <a href="http://angularjs.org/" target="_blank">
+                <img src="../static/images/AngularJs-small.png" th:src="@{/images/AngularJS-small.png}"
+                     alt="AngularJS">
+            </a>
+            <a href="http://getbootstrap.com/" target="_blank">
+                <span class="bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline">B</span>
+            </a>
+            <a href="http://socket.io/" target="_blank">
+                <img src="../static/imagessocketio.png" th:src="@{/images/socketio.png}"
+                     alt="socket.io">
+            </a>
+            <a href="http://spring.io/" target="_blank">
+                <img src="../static/images/spring-logo.png" th:src="@{/images/spring-logo.png}"
+                     alt="spring logo">
+            </a>
+
+        </p>
+    </div>
+</footer>
+
+<script src="../static/js/angular-1.4.7.js" th:src="@{/js/angular-1.4.7.js}"></script>
+
+<script src="../static/js/angular-ui-bootstrap-tpls-0.14.3.js"
+        th:src="@{/js/angular-ui-bootstrap-tpls-0.14.3.js}"></script>
+<script src="../static/js/angular-route-1.4.7.js" th:src="@{js/angular-route-1.4.7.js}"></script>
+<script src="../static/js/angular-animate-1.4.7.js" th:src="@{/js/angular-animate-1.4.7.js}"></script>
+<script src="../static/js/othellowebapp.js" th:src="@{/js/othellowebapp.js}"></script>
 </body>
 </html>

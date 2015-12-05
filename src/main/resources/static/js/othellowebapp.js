@@ -1,4 +1,4 @@
-angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
+angular.module('othellogameweb', ['ui.bootstrap', 'ngRoute', 'ngAnimate'])
   .config(function($routeProvider, $httpProvider) {
 
 	$routeProvider.when('/home', {
@@ -19,7 +19,7 @@ angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
 	}).when('/forgetPassword',{
       	    templateUrl : '/partials/forgetPassword',
       	    controller : 'forgetPassword'
-    }).otherwise('/home');
+    }).otherwise('/');
 
   })
   .controller('home', function($rootScope, $scope, $http, $location) {
@@ -28,6 +28,11 @@ angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
     var profileUrl = "/api/userInformations/"+$rootScope.user.userId.toString();
     $http.get(profileUrl).success(function(data){
        $scope.userInformation = data;
+       if(data.rankPoints == 0){
+         $scope.title = '超级新人';}
+       if(data.rankPoints > 0 && data.rankPoints < 100){
+         $scope.title= '新人';
+       }
      });
      var userGroupUrl = "/api/users/"+$rootScope.user.userId.toString()+"/userGroup";
      $http.get(userGroupUrl).success(function(data){
@@ -41,7 +46,13 @@ angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
    }
   })
   .controller('login', function($rootScope, $scope, $http, $location){
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+        $scope.error = false;
+    };
+
     $scope.userLogin = function() {
+      $scope.alerts = [];
          $http.post('/api/authorization', $scope.login).success(function(data, status){
            $rootScope.user = data;
            if(data.username){
@@ -55,13 +66,11 @@ angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
               }
          }).error(function(data, status){
            $scope.error = true;
+           $scope.alerts.push({type:'danger',msg:'登录过程发生了错误，请重试！'});
          });
         };
   })
   .controller('navigation', function($rootScope, $scope, $http, $location) {
-    $scope.isActive = function (viewLocation) {
-      return $location.path().indexOf(viewLocation) == 0;
-    };
     $scope.logout = function() {
        if($rootScope.user){
              var logout = new Object();
@@ -96,6 +105,77 @@ angular.module('othellogameweb', [ 'ngRoute', 'ngAnimate'])
            $scope.error = true;
          });
       }
+      $scope.today = function() {
+          $scope.dt = new Date();
+      };
+      $scope.today();
+
+      $scope.clear = function () {
+        $scope.dt = null;
+      };
+
+      // Disable weekend selection
+      $scope.disabled = function(date, mode) {
+        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+      };
+
+      $scope.toggleMin = function() {
+        $scope.minDate = $scope.minDate ? null : new Date();
+      };
+      $scope.toggleMin();
+      $scope.maxDate = new Date(2020, 5, 22);
+
+      $scope.open = function($event) {
+        $scope.status.opened = true;
+      };
+
+      $scope.setDate = function(year, month, day) {
+        $scope.dt = new Date(year, month, day);
+      };
+
+      $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+      };
+
+      $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+      $scope.format = $scope.formats[0];
+
+      $scope.status = {
+        opened: false
+      };
+
+      var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        var afterTomorrow = new Date();
+        afterTomorrow.setDate(tomorrow.getDate() + 2);
+        $scope.events =
+        [
+          {
+            date: tomorrow,
+            status: 'full'
+          },
+          {
+            date: afterTomorrow,
+            status: 'partially'
+          }
+        ];
+
+        $scope.getDayClass = function(date, mode) {
+          if (mode === 'day') {
+            var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+            for (var i=0;i<$scope.events.length;i++){
+              var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+              if (dayToCheck === currentDay) {
+                return $scope.events[i].status;
+              }
+            }
+        }
+
+        return '';
+      };
     }
   })
   .controller('forgetPassword', function($rootScope, $scope, $http, $location){

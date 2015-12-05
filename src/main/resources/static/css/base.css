@@ -1,0 +1,22 @@
+body { padding-top: 70px; }
+.bs-docs-booticon-outline {
+    background-color: transparent;
+    border: 1px solid #CDBFE3;
+}
+.bs-docs-booticon-lg {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+    line-height: 25px;
+}
+.bs-docs-booticon {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    font-weight: 500;
+    color: #FFF;
+    text-align: center;
+    cursor: default;
+    background-color: #563D7C;
+    border-radius: 15%;
+}
