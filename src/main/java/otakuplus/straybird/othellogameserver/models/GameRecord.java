@@ -1,9 +1,6 @@
 package otakuplus.straybird.othellogameserver.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "OthelloGameRecord")
@@ -12,19 +9,13 @@ public class GameRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer gameRecordId;
-    @ManyToOne
-    @JoinColumn(name = "playera")
-    private User playerA;
-    @ManyToOne
-    @JoinColumn(name = "playerb")
-    private User playerB;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd,HH:00", timezone = "GMT+8")
-    private Date gameBeginTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd,HH:00", timezone = "GMT+8")
-    private Date gameEndTime;
+    private String playerA;
+    private String playerB;
+    private String gameBeginTime;
+    private String gameEndTime;
     private int whiteNumber;
     private int blackNumber;
-    @Column(columnDefinition = "TINYBLOB")
+    @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] record;
 
     public Integer getGameRecordId() {
@@ -35,35 +26,35 @@ public class GameRecord {
         this.gameRecordId = gameRecordId;
     }
 
-    public User getPlayerA() {
+    public String getPlayerA() {
         return playerA;
     }
 
-    public void setPlayerA(User playerA) {
+    public void setPlayerA(String playerA) {
         this.playerA = playerA;
     }
 
-    public User getPlayerB() {
+    public String getPlayerB() {
         return playerB;
     }
 
-    public void setPlayerB(User playerB) {
+    public void setPlayerB(String playerB) {
         this.playerB = playerB;
     }
 
-    public Date getGameBeginTime() {
+    public String getGameBeginTime() {
         return gameBeginTime;
     }
 
-    public void setGameBeginTime(Date gameBeginTime) {
+    public void setGameBeginTime(String gameBeginTime) {
         this.gameBeginTime = gameBeginTime;
     }
 
-    public Date getGameEndTime() {
+    public String getGameEndTime() {
         return gameEndTime;
     }
 
-    public void setGameEndTime(Date gameEndTime) {
+    public void setGameEndTime(String gameEndTime) {
         this.gameEndTime = gameEndTime;
     }
 

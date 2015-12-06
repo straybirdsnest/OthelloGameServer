@@ -53,13 +53,11 @@ CREATE TABLE OTHELLO_GAME_RECORD (
   `game_record_id`     INT PRIMARY KEY AUTO_INCREMENT,
   `black_number`       INT,
   `white_number`       INT,
-  `game_begin_time`    DATETIME,
-  `game_end_time`      DATETIME,
-  `playera`            INT,
-  `playerb`            INT,
-  `record`             TINYBLOB,
-   FOREIGN KEY (`playera`) REFERENCES OTHELLO_USER (user_id),
-   FOREIGN KEY (`playerb`) REFERENCES OTHELLO_USER (user_id)
+  `game_begin_time`    VARCHAR(64),
+  `game_end_time`      VARCHAR(64),
+  `playera`            VARCHAR(32),
+  `playerb`            VARCHAR(32),
+  `record`             MEDIUMBLOB
 );
 
 CREATE TABLE OTHELLO_MEMBERSHIP (

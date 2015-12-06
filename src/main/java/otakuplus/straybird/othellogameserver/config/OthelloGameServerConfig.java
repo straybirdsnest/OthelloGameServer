@@ -73,8 +73,8 @@ public class OthelloGameServerConfig {
         socketIOServer.addEventListener(SocketIOService.GAME_OPERATION_EVENT, GameOperation.class, new DataListener<GameOperation>() {
             @Override
             public void onData(SocketIOClient socketIOClient, GameOperation gameOperation, AckRequest ackRequest) throws Exception {
-                logger.debug("receive game operation event");
-                logger.debug("null or "+gameOperation.getSetX());
+                //logger.debug("receive game operation event");
+                //logger.debug("null or "+gameOperation.getSetX());
                 socketIOServer.getRoomOperations(gameOperation.getRoomName())
                         .sendEvent(SocketIOService.GAME_OPERATION_EVENT, gameOperation);
             }
