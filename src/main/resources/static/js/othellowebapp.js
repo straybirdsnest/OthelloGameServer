@@ -35,13 +35,19 @@ angular.module('othellogameweb', ['ui.bootstrap', 'ngRoute', 'ngAnimate'])
        }
      });
      var userGroupUrl = "/api/users/"+$rootScope.user.userId.toString()+"/userGroup";
-     $http.get(userGroupUrl).success(function(data){
+     $http.get(userGroupUrl).success(function(data, status){
        $rootScope.userGroup = data;
        if($rootScope.userGroup.userGroupName == "ROLE_ADMIN"){
          $rootScope.roleAdmin = true;
        }else{
          $rootScope.roleAdmin = false;
        }
+     });
+     var gameRecordsUrl = "/api/gameRecords/search/findByUsername?username="+$rootScope.user.username;
+     $http.get(gameRecordsUrl).success(function(data, status){
+        $scope.gameRecords = data._embedded.gameRecords;
+     }).error(function(data, status){
+
      });
    }
   })
@@ -88,94 +94,24 @@ angular.module('othellogameweb', ['ui.bootstrap', 'ngRoute', 'ngAnimate'])
       }
   })
   .controller('profile', function($rootScope, $scope, $http, $location){
+    $scope.alerts = [];
+    $scope.closeAlert = function(index) {
+       $scope.alerts.splice(index, 1);
+    };
     if($rootScope.user){
       var profileUrl = "/api/userInformations/"+$rootScope.user.userId.toString();
       $http.get(profileUrl).success(function(data, status)
       {
          $scope.userInformation = data;
-       });
+      });
       $scope.updateProfile = function(){
          $http.patch(profileUrl, $scope.userInformation).success(function(data, status){
            $scope.userInformation = data;
-           $scope.success = true;
-           $scope.error = false;
+           $scope.alerts.push({type : 'success', msg : '操作成功，您的个人信息已更新。'});
          }).error(function(data, status){
-           console.log(status);
-           $scope.success = false;
-           $scope.error = true;
+           $scope.alerts.push({type : 'danger', msg : '操作失败，请重试。'});
          });
       }
-      $scope.today = function() {
-          $scope.dt = new Date();
-      };
-      $scope.today();
-
-      $scope.clear = function () {
-        $scope.dt = null;
-      };
-
-      // Disable weekend selection
-      $scope.disabled = function(date, mode) {
-        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-      };
-
-      $scope.toggleMin = function() {
-        $scope.minDate = $scope.minDate ? null : new Date();
-      };
-      $scope.toggleMin();
-      $scope.maxDate = new Date(2020, 5, 22);
-
-      $scope.open = function($event) {
-        $scope.status.opened = true;
-      };
-
-      $scope.setDate = function(year, month, day) {
-        $scope.dt = new Date(year, month, day);
-      };
-
-      $scope.dateOptions = {
-        formatYear: 'yy',
-        startingDay: 1
-      };
-
-      $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-      $scope.format = $scope.formats[0];
-
-      $scope.status = {
-        opened: false
-      };
-
-      var tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        var afterTomorrow = new Date();
-        afterTomorrow.setDate(tomorrow.getDate() + 2);
-        $scope.events =
-        [
-          {
-            date: tomorrow,
-            status: 'full'
-          },
-          {
-            date: afterTomorrow,
-            status: 'partially'
-          }
-        ];
-
-        $scope.getDayClass = function(date, mode) {
-          if (mode === 'day') {
-            var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-            for (var i=0;i<$scope.events.length;i++){
-              var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
-              if (dayToCheck === currentDay) {
-                return $scope.events[i].status;
-              }
-            }
-        }
-
-        return '';
-      };
     }
   })
   .controller('forgetPassword', function($rootScope, $scope, $http, $location){

@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/api/login",
                 "/api/signin",
                 "/api/user/**",
+                "/api/profile/**",
                 "/#/**",
                 "/partials/**"
         };

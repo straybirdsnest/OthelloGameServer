@@ -16,13 +16,18 @@
                     <div class="profile-usertitle-job">
                         {{title}}
                     </div>
+                    <div class="profile-game-status">
+                        {{userInformation.gameWins}}胜
+                        {{userInformation.gameDraws}}平
+                        {{userInformation.gameLosts}}负
+                    </div>
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR MENU -->
                 <div class="profile-usermenu">
                     <ul class="nav">
                         <li class="active">
-                            <a href="#">
+                            <a href="#/home">
                                 <i class="glyphicon glyphicon-home"></i>
                                 个人主页</a>
                         </li>
@@ -48,7 +53,33 @@
         </div>
         <div class="col-md-9">
             <div class="profile-content">
-                Some user related content goes here...
+                <div class="text-center">游戏记录</div>
+                <table class="table table-striped table-hover">
+                    <thead class="thead-default">
+                    <tr>
+                        <th>#</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                        <th>玩家</th>
+                        <th>白方</th>
+                        <th></th>
+                        <th>黑方</th>
+                        <th>玩家</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="gameRecord in gameRecords">
+                        <th scope="row">{{$index+1}}</th>
+                        <td>{{gameRecord.gameBeginTime}}</td>
+                        <td>{{gameRecord.gameEndTime}}</td>
+                        <td>{{gameRecord.playerA}}</td>
+                        <td>{{gameRecord.whiteNumber}}</td>
+                        <td>-</td>
+                        <td>{{gameRecord.blackNumber}}</td>
+                        <td>{{gameRecord.playerB}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

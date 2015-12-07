@@ -1,10 +1,5 @@
-<div ng-class="{'alert alert-success': success, 'alert alert-danger': error }" role="alert">
-    <span ng-show="success">
-        <p>您的个人信息已成功更新。</p>
-    </span>
-    <span ng-show="error">
-         <p>更新操作失败。</p>
-    </span>
+<div class="row" ng-show="alerts.length !=0">
+    <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
 </div>
 <div>
     <form class="form-register" name="updateProfileForm" role="form" ng-submit="updateProfile()">
@@ -20,18 +15,6 @@
             <label for="inputGender" class="control-label">性别</label>
             <input type="text" id="inputGender" name="gender" ng-model="userInformation.gender" class="form-control"
                    placeholder={{userInformation.gender}} value={{userInformation.gender}} required>
-        </div>
-        <div class="form-group">
-            <label for="inputBirthday" class="control-label">生日</label>
-            <input type="date" id="inputBirthday" name="birthday" ng-model="dt" value={{new
-                   Date(userInformation.birthday)}} pattern="yyyy-MM-dd" placeholder={{userInformation.birthday}}
-                   class="form-control" uib-datepicker-popup is-open="status.opened" min-date="minDate"
-                   max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)"
-                   ng-required="true" close-text="关闭"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i
-                        class="glyphicon glyphicon-calendar"></i></button>
-              </span>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <button class="btn btn-lg btn-primary btn-block" type="submit">更新</button>
